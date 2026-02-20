@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExFlow｜経費管理システム</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+* { box-sizing:border-box; font-family:'Segoe UI','Hiragino Sans','Meiryo',sans-serif; }
+body { background:#F4F6F8; margin:0; }
+
+/* ── Sidebar ── */
+#sidebar { width:240px; background:linear-gradient(180deg,#1B5E20 0%,#2E7D32 100%);
+           position:fixed; top:0; left:0; height:100vh; z-index:100; display:flex; flex-direction:column; }
+.nav-item { cursor:pointer; transition:.15s; display:flex; align-items:center; gap:12px;
+            padding:12px 20px; color:rgba(255,255,255,.85); font-size:13.5px; }
+.nav-item:hover  { background:rgba(255,255,255,.12); }
+.nav-item.active { background:rgba(255,255,255,.18); border-left:4px solid #A5D6A7;
+                   color:white; font-weight:600; padding-left:16px; }
+
+/* ── Pages ── */
+.page { display:none; }  .page.active { display:block; }
+
+/* ── Tabs ── */
+.tab { cursor:pointer; padding:9px 22px; border-bottom:3px solid transparent;
+       font-size:13px; color:#757575; font-weight:500; transition:.15s; }
+.tab.active { border-bottom-color:#2E7D32; color:#2E7D32; font-weight:700; }
+.tab:hover  { color:#2E7D32; }
+
+/* ── Status badges ── */
+.badge { font-size:11px; padding:3px 10px; border-radius:999px; font-weight:600; white-space:nowrap; }
+.b-pending  { background:#FFF8E1; color:#E65100; border:1px solid #FFCC80; }
+.b-approved { background:#E8F5E9; color:#2E7D32; border:1px solid #A5D6A7; }
+.b-rejected { background:#FFEBEE; color:#C62828; border:1px solid #FFCDD2; }
+
+/* ── Table ── */
+.dtbl { width:100%; border-collapse:collapse; }
+.dtbl th { background:#1B5E20; color:white; padding:10px 14px; text-align:left; font-size:12px; font-weight:600; white-space:nowrap; }
+.dtbl td { padding:9px 14px; border-bottom:1px solid #EEE; font-size:13px; vertical-align:middle; }
+.dtbl tbody tr:hover td { background:#F1F8E9; cursor:pointer; }
+.dtbl tbody tr:last-child td { border-bottom:none; }
+
+/* ── Cards ── */
+.scard { background:white; border-radius:14px; padding:20px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+.apcard { background:white; border-radius:14px; padding:18px 20px; margin-bottom:12px;
+          box-shadow:0 2px 8px rgba(0,0,0,.07); transition:.2s; }
+.apcard:hover { box-shadow:0 4px 16px rgba(0,0,0,.12); }
+
+/* ── Buttons ── */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px;
+       border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:.15s; }
+.bp { background:#2E7D32; color:white; } .bp:hover { background:#1B5E20; }
+.bs { background:white; color:#2E7D32; border:2px solid #2E7D32; } .bs:hover { background:#E8F5E9; }
+.bd { background:#C62828; color:white; } .bd:hover { background:#B71C1C; }
+.bsm { padding:5px 12px; font-size:12px; }
+
+/* ── Form ── */
+.fi { border:1.5px solid #BDBDBD; border-radius:8px; padding:8px 12px; width:100%;
+      font-size:13.5px; transition:.15s; background:white; }
+.fi:focus { outline:none; border-color:#2E7D32; box-shadow:0 0 0 3px rgba(46,125,50,.1); }
+.fl { display:block; font-size:12px; font-weight:600; color:#555; margin-bottom:5px; }
+.req { color:#E53935; }
+
+/* ── Filter panel ── */
+#filter-panel { display:none; border-top:1px solid #EEE; }
+#filter-panel.open { display:block; }
+
+/* ── Progress bar ── */
+.pb { height:6px; background:#E0E0E0; border-radius:3px; overflow:hidden; }
+.pf { height:100%; background:#2E7D32; border-radius:3�x; transition:.3s; }
+
+/* ── Modal ── */
+#modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
+                 z-index:1000; align-items:center; justify-content:center; }
+#modal-overlay.open { display:flex; }
+#modal-box { background:white; border-radius:16px; width:520px; max-width:95vw; padding:28px;
+             box-shadow:0 20px 60px rgba(0,0,0,.2); }
+
+/* ── Login screen ── */
+#login-screen { display:none; position:fixed; inset:0; background:linear-gradient(135deg,#1B5E20,#2E7D32,#43A047);
+                z-index:200; align-items:center; justify-content:center; }
+#login-screen.show { display:flex; }
+#login-box { background:white; border-radius:20px; padding:40px 36px; width:400px;
+             box-shadow:0 24px 80px rgba(0,0,0,.3); }
+
+/* ── Toast ── */
+#toast { position:fixed; bottom:24px; right:24px; background:#2E7D32; color:white;
+         padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600;
+         display:none; z-index:2000; box-shadow:0 4px 16px rgba(0,0,0,.2);
+         gap:8px; align-items:center; }
+#toast.show { display:flex; }
+#toast.err { background:#C62828; }
+
+/* ── Loading spinner ── */
+.spinner { display:flex; align-items:center; justify-content:center; padding:50px; color:#9E9E9E; flex-direction:column; gap:12px; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:#A5D6A7; border-radius:3px; }
+
+@media print {
+  #sidebar, #header-bar, .no-print { display:none !important; }
+  #main { margin-left:0 !important; }
+  #page-export { display:block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen" class="show">
+  <div id="login-box">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:54px;height:54px;background:#E8F5E9;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+        <i class="fa-solid fa-receipt" style="color:#1B5E20;font-size:24px"></i>
+      </div>
+      <div style="font-size:22px;font-weight:800;color:#1B5E20">ExFlow</div>
+      <div style="font-size:13px;color:#9E9E9E;margin-top:4px">経費管理システム</div>
+    </div>
+    <div id="login-error" style="display:none;background:#FFEBEE;border:1px solid #FFCDD2;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#C62828"></div>
+    <form onsubmit="doLogin(event)">
+      <div style="margin-bottom:14px">
+        <label class="fl">メールアドレス</label>
+        <input type="email" id="login-email" class="fi" placeholder="例：tanaka@example.com" required>
+      </div>
+      <div style="margin-bottom:20px">
+        <label class="fl">パスワード</label>
+        <input type="password" id="login-pass" class="fi" placeholder="パスワードを入力" required>
+      </div>
+      <button type="submit" class="btn bp" style="width:100%;justify-content:center;padding:12px">
+        <i class="fa-solid fa-right-to-bracket"></i> ログイン
+      </button>
+    </form>
+    <div style="margin-top:20px;padding:14px;background:#F9FBF9;border-radius:10px;font-size:12px;color:#888">
+      <div style="font-weight:600;color:#555;margin-bottom:6px">デモ用アカウント</div>
+      <div>一般社員: tanaka@example.com / password123</div>
+      <div style="margin-top:2px">社長: yamada@example.com / admin1234</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div id="sidebar">
+  <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.15)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:38px;height:38px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center">
+        <i class="fa-solid fa-receipt" style="color:#1B5E20;font-size:18px"></i>
+      </div>
+      <div>
+        <div style="color:white;font-weight:800;font-size:16px">ExFlow</div>
+        <div style="color:#A5D6A7;font-size:11px">経費管理システム</div>
+      </div>
+    </div>
+  </div>
+  <nav style="flex:1;padding:8px 0;overflow-y:auto">
+    <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+      <i class="fa-solid fa-gauge-high" style="width:18px;text-align:center"></i>ダッシュボード</div>
+    <div class="nav-item" data-page="expenses" onclick="showPage('expenses')">
+      <i class="fa-solid fa-list-ul"     style="width:18px;text-align:center"></i>経費一覧</div>
+    <div class="nav-item" data-page="form" onclick="showPage('form')">
+      <i class="fa-solid fa-plus-circle" style="width:18px;text-align:center"></i>経費申請</div>
+    <div class="nav-item" data-page="approval" id="nav-approval" onclick="showPage('approval')" style="display:none">
+      <i class="fa-solid fa-check-double" style="width:18px;text-align:center"></i>承認管理
+      <span id="pending-badge" style="margin-left:auto;background:#EF5350;color:white;font-size:11px;border-radius:999px;padding:1px 8px">0</span>
+    </div>
+    <div class="nav-item" data-page="analytics" onclick="showPage('analytics')">
+      <i class="fa-solid fa-chart-pie"   style="width:18px;text-align:center"></i>分析レポート</div>
+    <div class="nav-item" data-page="export" onclick="showPage('export')">
+      <i class="fa-solid fa-file-export" style="width:18px;text-align:center"></i>出力・印刷</div>
+  </nav>
+  <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:10px">
+    <div id="uavatar" style="width:34px;height:34px;background:#66BB6A;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#1B5E20;font-weight:800;font-size:14px">?</div>
+    <div>
+      <div id="uname" style="color:white;font-size:13px;font-weight:600">-</div>
+      <div id="udept" style="color:#A5D6A7;font-size:11px">-</div>
+    </div>
+    <button onclick="doLogout()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:16px" title="ログアウト">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div id="main" style="margin-left:240px;display:flex;flex-direction:column;min-height:100vh">
+  <div id="header-bar" style="background:white;border-bottom:1px solid #E0E0E0;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+    <h1 id="page-title" style="font-size:17px;font-weight:700;color:#212121;margin:0">ダッシュボード</h1>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span style="font-size:12px;color:#9E9E9E" id="today-label"></span>
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#555">
+        <i class="fa-solid fa-user-circle" style="color:#2E7D32"></i>
+        <span id="header-uname">-</span>
+        <span id="header-role" style="background:#E8F5E9;color:#2E7D32;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600">-</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:1;padding:24px 28px">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div id="page-dashboard" class="page active">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+        <div class="scard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">今月の経費合計</span>
+            <div style="width:36px;height:36px;background:#E8F5E9;border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-yen-sign" style="color:#2E7D32;font-size:14px"></i></div>
+          </div>
+          <div id="s-month-total" style="font-size:26px;font-weight:800;color:#1B5E20">-</div>
+          <div id="s-month-label" style="font-size:11px;color:#BDBDBD;margin-top:4px">-</div>
+        </div>
+        <div class="scard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">今月の件数</span>
+            <div style="width:36px;height:36px;background:#E3F2FD;border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-file-invoice" style="color:#1565C0;font-size:14px"></i></div>
+          </div>
+          <div id="s-month-count" style="font-size:26px;font-weight:800;color:#212121">-</div>
+          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">申請件数</div>
+        </div>
+        <div class="scard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">承認待ち</span>
+            <div style="width:36px;height:36px;background:#FFF3E0;border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-clock" style="color:#E65100;font-size:14px"></i></div>
+          </div>
+          <div id="s-pending" style="font-size:26px;font-weight:800;color:#E65100">-</div>
+          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">未承認の経費</div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:20px">
+        <div style="display:flex;border-bottom:1px solid #EEE;padding:0 20px">
+          <div class="tab active" onclick="setDashTab('monthly',this)">月次</div>
+          <div class="tab"        onclick="setDashTab('daily',this)">日次</div>
+          <div class="tab"        onclick="setDashTab('yearly',this)">年次</div>
+        </div>
+        <div style="padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <button onclick="dashPrev()" style="background:none;border:none;cursor:pointer;color:#9E9E9E;font-size:18px;padding:4px 8px"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="dash-period-label" style="font-weight:700;color:#333;font-size:15px">-</span>
+            <button onclick="dashNext()" style="background:none;border:none;cursor:pointer;color:#9E9E9E;font-size:18px;padding:4px 8px"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div style="height:220px;position:relative"><canvas id="dash-chart"></canvas></div>
+          <div style="margin-top:14px;text-align:center;padding-top:12px;border-top:1px solid #F5F5F5">
+            <span style="color:#9E9E9E;font-size:13px">期間合計: </span>
+            <span id="dash-period-total" style="color:#1B5E20;font-weight:800;font-size:17px">¥0</span>
+            <span id="dash-period-count" style="color:#BDBDBD;font-size:12px;margin-left:6px">（0件）</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #EEE">
+          <span style="font-weight:700;color:#333;font-size:14px">直近の申請</span>
+          <button onclick="showPage('expenses')" style="background:none;border:none;color:#2E7D32;font-size:12px;cursor:pointer;font-weight:600">すべて見る →</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="dtbl"><thead><tr><th>日付</th><th>金額</th><th>科目</th><th>使用場所</th><th>ステータス</th></tr></thead>
+          <tbody id="recent-tbody"><tr><td colspan="5"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div></td></tr></tbody></table>
+        </div>
+      </div>
+    </div><!-- /dashboard -->
+
+    <!-- ══ EXPENSE LIST ══ -->
+    <div id="page-expenses" class="page">
+      <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px">
+          <button onclick="toggleFilter()" class="btn bs bsm no-print">
+            <i class="fa-solid fa-filter"></i> フィルター
+          </button>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:12px;color:#9E9E9E">並び替え:</span>
+            <select id="sort-sel" onchange="loadExpenses()" class="fi" style="width:auto;font-size:12px;padding:5px 8px">
+              <option value="date_desc">日付（新しい順）</option>
+              <option value="date_asc">日付（古い順）</option>
+              <option value="amount_desc">金額（高い順）</option>
+              <option value="amount_asc">金額（低い順）</option>
+            </select>
+          </div>
+        </div>
+        <div id="filter-panel" style="padding:0 20px 16px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
+            <div><label class="fl">開始日</label><input type="date" id="fl-s" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
+            <div><label class="fl">終了日</label><input type="date" id="fl-e" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
+            <div><label class="fl">ステータス</label>
+              <select id="fl-st" class="fi" style="font-size:12px" onchange="loadExpenses()">
+                <option value="">すべて</option><option value="pending">承認待ち</option>
+                <option value="approved">承認済み</option><option value="rejected">否認</option>
+              </select></div>
+            <div><label class="fl">経費科目</label>
+              <select id="fl-cat" class="fi" style="font-size:12px" onchange="loadExpenses()">
+                <option value="">すべて</option></select></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-top:10px">
+            <div><label class="fl">最小金額（円）</label><input type="number" id="fl-min" class="fi" style="font-size:12px" placeholder="0" onchange="loadExpenses()"></div>
+            <div><label class="fl">最大金額（円）</label><input type="number" id="fl-max" class="fi" style="font-size:12px" placeholder="上限なし" onchange="loadExpenses()"></div>
+            <div style="display:flex;align-items:flex-end"><button onclick="resetFilter()" class="btn bs bsm">リセット</button></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+        <span id="list-info" style="font-size:13px;color:#9E9E9E">0件</span>
+        <span id="list-total-lbl" style="font-size:13px;font-weight:700;color:#1B5E20">合計: ¥0</span>
+      </div>
+      <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden">
+        <table class="dtbl"><thead><tr><th>日付</th><th>金額</th><th>科目</th><th>使用場所</th><th>備考</th><th>ステータス</th><th style="text-align:center">操作</th></tr></thead>
+        <tbody id="list-tbody"></tbody></table>
+      </div>
+      <div id="list-pagination" style="display:flex;justify-content:center;gap:6px;margin-top:14px"></div>
+    </div><!-- /expenses -->
+
+    <!-- ══ FORM ══ -->
+    <div id="page-form" class="page">
+      <div style="max-width:640px;margin:0 auto">
+        <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:28px">
+          <h2 style="font-size:16px;font-weight:700;color:#212121;margin-bottom:20px;display:flex;align-items:center;gap:8px">
+            <i class="fa-solid fa-plus-circle" style="color:#2E7D32"></i> 経費申請
+          </h2>
+          <div style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px">
+            <i class="fa-brands fa-line" style="color:#00B900;font-size:22px;margin-top:2px"></i>
+            <div style="font-size:12.5px;color:#2E7D32">
+              <strong>LINE連携</strong>：公式LINEにレシートを送ると自動で申請フォームに反映されます。<br>
+              <span style="color:#66BB6A">LINE送信 → OCR解析 → 自動入力 → 確認・申請</span>
+            </div>
+          </div>
+          <div id="form-success" style="display:none;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:14px 16px;margin-bottom:18px;align-items:center;gap:10px">
+            <i class="fa-solid fa-check-circle" style="color:#2E7D32;font-size:20px"></i>
+            <div><strong style="color:#1B5E20">申請を登録しました</strong><br>
+            <span style="font-size:12px;color:#388E3C">承認待ちとして保存されました。</span></div>
+          </div>
+          <form id="exp-form" onsubmit="submitForm(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div><label class="fl">金額（円）<span class="req">*</span></label>
+                <input type="number" id="fm-amount" class="fi" required min="1" max="9999999" placeholder="例：3,200"></div>
+              <div><label class="fl">経費発生日<span class="req">*</span></label>
+                <input type="date" id="fm-date" class="fi" required></div>
+              <div style="grid-column:span 2"><label class="fl">経費科目<span class="req">*</span></label>
+                <select id="fm-cat" class="fi" required><option value="">選択してください</option></select></div>
+              <div style="grid-column:span 2"><label class="fl">使用場所・店舗名</label>
+                <input type="text" id="fm-loc" class="fi" placeholder="例：東京メトロ、スターバックス渋谷店"></div>
+              <div style="grid-column:span 2"><label class="fl">備考・目的</label>
+                <textarea id="fm-note" class="fi" rows="3" style="resize:none" placeholder="例：ABC商事とピ打ち合わせ"></textarea></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:20px">
+              <button type="submit" class="btn bp" style="flex:1;justify-content:center">
+                <i class="fa-solid fa-paper-plane"></i> 申請する</button>
+              <button type="button" onclick="resetForm()" class="btn bs">リセット</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div><!-- /form -->
+
+    <!-- ══ APPROVAL ══ -->
+    <div id="page-approval" class="page">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <h2 style="font-size:16px;font-weight:700;color:#212121;margin:0">承認管理</h2>
+          <p id="ap-subtitle" style="font-size:12px;color:#9E9E9E;margin:4px 0 0">-</p>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button id="af-p" onclick="setApFilter('pending')" class="btn bp bsm">承認待ち</button>
+          <button id="af-a" onclick="setApFilter('all')"     class="btn bs bsm">すべて</button>
+        </div>
+      </div>
+      <div id="approval-list"></div>
+    </div><!-- /approval -->
+
+    <!-- ══ ANALYTICS ══ -->
+    <div id="page-analytics" class="page">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div style="background:white;border-radius:10px;padding:4px;display:flex;box-shadow:0 2px 8px rgba(0,0,0,.07)">
+          <button id="anl-m" onclick="setAnlMode('month')" style="padding:7px 18px;border:none;border-radius:8px;background:#2E7D32;color:white;font-size:13px;font-weight:600;cursor:pointer">月次</button>
+          <button id="anl-y" onclick="setAnnMode('year')"  style="padding:7px 18px;border:none;border-radius:8px;background:none;color:#9E9E9E;font-size:13px;font-weight:600;cursor:pointer">年次</button>
+        </div>
+        <select id="anl-period" onchange="renderAnalytics()" class="fi" style="width:auto;font-size:13px">
+          <option value="2026-02">2026年2月</option>
+          <option value="2026-01">2026年1月</option>
+          <option value="2025-12">2025年12月</option>
+          <option value="2025-11">2025年11月</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
+          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">科目別内訳</h3>
+          <div style="height:210px;position:relative"><canvas id="pie-chart"></canvas></div>
+        </div>
+        <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
+          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">月別経費推移（2026年）</h3>
+          <div style="height:210px;position:relative"><canvas id="bar-chart"></canvas></div>
+        </div>
+      </div>
+      <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+        <div style="padding:16px 20px;border-bottom:1px solid #EEE;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:700;font-size:14px;color:#333">科目別集計</span>
+          <span id="anl-total" style="font-size:13px;color:#2E7D32;font-weight:700">合計: ¥0</span>
+        </div>
+        <table class="dtbl"><thead><tr><th>科目</th><th style="text-align:center">件数</th><th>合計金額</th><th>平均金額</th><th style="min-width:120px">割合</th></tr></thead>
+        <tbody id="anl-tbody"></tbody></table>
+      </div>
+    </div><!-- /analytics -->
+
+    <!-- ══ EXPORT ══ -->
+    <div id="page-export" class="page">
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:16px">
+        <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
+          <h3 style="font-size:14px;font-weight:700;color:#333;margin-bottom:16px">出力設定</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div><label class="fl">開始日</label><input type="date" id="ex-s" class="fi" style="font-size:12px" onchange="renderExport()"></div>
+            <div><label class="fl">終了日</label><input type="date" id="ex-e" class="fi" style="font-size:12px" onchange="renderExport()"></div>
+            <div><label class="fl">経費科目</label>
+              <select id="ex-cat" class="fi" style="font-size:12px" onchange="renderExport()"><option value="">すべての科目</option></select></div>
+            <div><label class="fl">ステータス</label>
+              <select id="ex-st" class="fi" style="font-size:12px" onchange="renderExport()">
+                <option value="">すべて</option><option value="approved">承認済みのみ</option><option value="pending">承認待ちのみ</option>
+              </select></div>
+            <hr style="border:none;border-top:1px solid #EEE">
+            <button onclick="doCSVExport()" class="btn bp" style="justify-content:center;width:100%">
+              <i class="fa-solid fa-file-csv"></i> CSVダウンロード</button>
+            <button onclick="window.print()" class="btn bs" style="justify-content:center;width:100%">
+              <i class="fa-solid fa-print"></i> 印刷・PDFに保存</button>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+          <div style="padding:16px 20px;border-bottom:1px solid #EEE;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-weight:700;font-size:14px;color:#333">出力プレビワー</span>
+            <span id="ex-total" style="font-size:13px;font-weight:700;color:#1B5E20">合計: ¥0</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="dtbl"><thead><tr><th>日付</th><th>申請者</th><th>金額</th><th>科目</th><th>使用場所</th><th>ステータス</th></tr></thead>
+            <tbody id="ex-tbody"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /export -->
+
+  </div>
+</div><!-- /main -->
+
+<!-- Modal -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <h3 style="font-size:16px;font-weight:700;color:#212121;margin:0">経費詳細</h3>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:#9E9E9E;font-size:20px"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><i class="fa-solid fa-check-circle"></i><span id="toast-msg"></span></div>
+
+<script>
+// ════════════════════════════════════════
+// API クライアント
+// ════════════════════════════════════════
+const API = '';   // 同一サーバーなので相対URL
+
+async function apiFetch(path, opts = {}) {
+  const token = localStorage.getItem('exflow_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    ...(opts.headers || {})
+  };
+  const res = await fetch(`${API}${path}`, { ...opts, headers });
+  if (res.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'エラーが発生しました' }));
+    throw new Error(err.detail || 'エラーが発生しました');
+  }
+  return res;
+}
+async function apiJSON(path, opts = {}) { return (await apiFetch(path, opts)).json(); }
+
+// ════════════════════════════════════════
+// 状態管理
+// ════════════════════════════════════════
+let CU = null;   // current user
+let CATS = [];   // categories cache
+let allExpenses = [];  // list page cache
+
+let dashTab  = 'monthly';
+let dashDate = new Date(2026, 1, 1);   // Feb 2026
+let apFilter = 'pending';
+let anlMode  = 'month';
+let lPage    = 1;
+const PG     = 15;
+
+let dashChartObj = null, pieChartObj = null, barChartObj = null;
+const GCOLS = ['#1B5E20','#2E7D32','#388E3C','#43A047','#4CAF50','#66BB6A','#81C784','#A5D6A7','#C8E6C9','#F1F8E9'];
+
+// ════════════════════════════════════════
+// ユーティリティ
+// ════════════════════════════════════════
+const fmt  = n => '¥' + (n||0).toLocaleString();
+const fmtD = s => { if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; };
+const badge = s => s==='approved'?'<span class="badge b-approved">承認済み</span>':
+                   s==='pending' ?'<span class="badge b-pending">承認待ち</span>':
+                                  '<span class="badge b-rejected">否認</span>';
+const catName = id => (CATS.find(c=>c.id===id)||{name:'-'}).name;
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = 'show' + (isErr ? ' err' : '');
+  setTimeout(() => t.classList.remove('show','err'), 2500);
+}
+function showModal(html) {
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(ev) {
+  if (!ev || ev.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════
+// ログイン / ログアウト
+// ════════════════════════════════════════
+async function doLogin(ev) {
+  ev.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const pw    = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  try {
+    const data = await apiJSON('/api/auth/login', {
+      method: 'POST', body: JSON.stringify({ email, password: pw })
+    });
+    localStorage.setItem('exflow_token', data.access_token);
+    CU = data.user;
+    await initApp();
+  } catch(e) {
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('exflow_token');
+  CU = null;
+  document.getElementById('login-screen').classList.add('show');
+}
+
+// ════════════════════════════════════════
+// 初期化
+// ════════════════════════════════════════
+async function initApp() {
+  document.getElementById('login-screen').classList.remove('show');
+
+  // ユーザー情報を表示
+  document.getElementById('uname').textContent       = CU.name;
+  document.getElementById('udept').textContent       = CU.department;
+  document.getElementById('uavatar').textContent     = CU.name[0];
+  document.getElementById('header-uname').textContent= CU.name;
+  document.getElementById('header-role').textContent = CU.role === 'admin' ? '社長' : '社員';
+  document.getElementById('today-label').textContent = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
+
+  // 承認管理メニューの表示
+  document.getElementById('nav-approval').style.display = CU.role === 'admin' ? 'flex' : 'none';
+
+  // 科目マスタ取得（キャッシュ）
+  CATS = await apiJSON('/api/categories');
+  const catOpts = CATS.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('fm-cat').innerHTML  = '<option value="">選択してください</option>' + catOpts;
+  document.getElementById('fl-cat').innerHTML  = '<option value="">すべて</option>' + catOpts;
+  document.getElementById('ex-cat').innerHTML  = '<option value="">すべての科目</option>' + catOpts;
+
+  // 今日の日付をデフォルト設定
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('fm-date').value = today;
+
+  // ダッシュボード表示
+  showPage('dashboard');
+}
+
+async function checkAuth() {
+  const token = localStorage.getItem('exflow_token');
+  if (!token) return;
+  try {
+    CU = await apiJSON('/api/users/me');
+    await initApp();
+  } catch { localStorage.removeItem('exflow_token'); }
+}
+
+// ════════════════════════════════════════
+// ナビゲーション
+// ════════════════════════════════════════
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.querySelector(`[data-page="${p}"]`).classList.add('active');
+  const titles = { dashboard:'ダッシュボード', expenses:'経費一覧', form:'経費申請',
+                   approval:'承認管理', analytics:'分析レポート', export:'出力・印刷' };
+  document.getElementById('page-title').textContent = titles[p] || p;
+  if (p === 'dashboard') renderDashboard();
+  if (p === 'expenses')  { lPage=1; loadExpenses(); }
+  if (p === 'approval')  loadApproval();
+  if (p === 'analytics') renderAnalytics();
+  if (p === 'export')    renderExport();
+}
+
+// ════════════════════════════════════════
+// ダッシュボード
+// ════════════════════════════════════════
+async function renderDashboard() {
+  const yr = dashDate.getFullYear(), mo = dashDate.getMonth() + 1;
+  try {
+    const [summary, recent] = await Promise.all([
+      apiJSON(`/api/analytics/summary?year=${yr}&month=${mo}`),
+      apiJSON('/api/expenses?sort=date_desc')
+    ]);
+    document.getElementById('s-month-total').textContent = fmt(summary.monthly_total);
+    document.getElementById('s-month-count').textContent = summary.monthly_count + '件';
+    document.getElementById('s-pending').textContent     = summary.pending_count  + '件';
+    document.getElementById('s-month-label').textContent = `${yr}年${mo}月`;
+    document.getElementById('pending-badge').textContent = summary.pending_count;
+
+    // 直近5件
+    const tbody = document.getElementById('recent-tbody');
+    const top5  = recent.slice(0, 5);
+    tbody.innerHTML = top5.length ? top5.map(e => `
+      <tr onclick="showDetail(${e.id})">
+        <td>${fmtD(e.expense_date)}</td>
+        <td style="font-weight:700;color:#1B5E20">${fmt(e.amount)}</td>
+        <td>${e.category.name}</td>
+        <td style="color:#9E9E9E;font-size:12px">${e.location||'-'}</td>
+        <td>${badge(e.status)}</td>
+      </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#9E9E9E;padding:24px">データがありません</td></tr>';
+
+    await renderDashChart(yr, mo);
+  } catch(e) { showToast(e.message, true); }
+}
+
+async function renderDashChart(yr, mo) {
+  document.getElementById('dash-period-total').textContent = '¥0';
+  document.getElementById('dash-period-count').textContent = '（0件）';
+  let labels = [], data = [], total = 0, count = 0, isDoughnut = false;
+
+  try {
+    if (dashTab === 'monthly') {
+      document.getElementById('dash-period-label').textContent = `${yr}年${mo}月`;
+      const days = await apiJSON(`/api/analytics/daily?year=${yr}&month=${mo}`);
+      labels = days.map(d => d.label);
+      data   = days.map(d => d.total);
+      total  = data.reduce((a, v) => a + v, 0);
+      count  = days.reduce((a, d) => a + d.count, 0);
+    } else if (dashTab === 'daily') {
+      const d = dashDate;
+      document.getElementById('dash-period-label').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+      const ds    = d.toISOString().split('T')[0];
+      const items = await apiJSON(`/api/expenses?date_from=${ds}&date_to=${ds}`);
+      const bycat = {};
+      items.forEach(e => { bycat[e.category.name] = (bycat[e.category.name]||0) + e.amount; });
+      labels     = Object.keys(bycat);
+      data       = Object.values(bycat);
+      isDoughnut = true;
+      total      = data.reduce((a, v) => a + v, 0);
+      count      = items.length;
+      if (!labels.length) { labels=['データなし']; data=[0]; }
+    } else {
+      document.getElementById('dash-period-label').textContent = `${yr}�t`;
+      const months = await apiJSON(`/api/analytics/monthly?year=${yr}`);
+      labels = months.map(m => m.label);
+      data   = months.map(m => m.total);
+      total  = data.reduce((a, v) => a + v, 0);
+      count  = months.reduce((a, m) => a + m.count, 0);
+    }
+
+    document.getElementById('dash-period-total').textContent = fmt(total);
+    document.getElementById('dash-period-count').textContent = `（${count}件）`;
+
+    const ctx = document.getElementById('dash-chart').getContext('2d');
+    if (dashChartObj) dashChartObj.destroy();
+    dashChartObj = new Chart(ctx, {
+      type: isDoughnut ? 'doughnut' : 'bar',
+      data: { labels, datasets:[{ label:'金額（円）', data,
+        backgroundColor: isDoughnut ? GCOLS : 'rgba(46,125,50,.75)',
+        borderColor: isDoughnut ? 'white' : '#2E7D32',
+        borderWidth: isDoughnut ? 2 : 1, borderRadius: isDoughnut ? 0 : 4 }] },
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:isDoughnut, position:'right', labels:{font:{size:11},boxWidth:12} } },
+        scales: isDoughnut ? {} : {
+          y:{ beginAtZero:true, grid:{color:'#F5F5F5'}, ticks:{callback:v=>v>=1000?'¥'+(v/1000)+'k':'¥'+v,font:{size:10}} },
+          x:{ grid:{display:false}, ticks:{font:{size:9},maxRotation:45} } } }
+    });
+  } catch(e) { showToast(e.message, true); }
+}
+
+function setDashTab(tab, el) {
+  dashTab = tab;
+  document.querySelectorAll('#page-dashboard .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderDashChart(dashDate.getFullYear(), dashDate.getMonth() + 1);
+}
+function dashPrev() {
+  if(dashTab==='monthly')      dashDate = new Date(dashDate.getFullYear(), dashDate.getMonth()-1, 1);
+  else if(dashTab==='daily')   dashDate = new Date(dashDate.getTime()-86400000);
+  else                         dashDate = new Date(dashDate.getFullYear()-1, 0, 1);
+  renderDashChart(dashDate.getFullYear(), dashDate.getMonth()+1);
+}
+function dashNext() {
+  if(dashTab==='monthly')      dashDate = new Date(dashDate.getFullYear(), dashDate.getMonth()+1, 1);
+  else if(dashTab==='daily')   dashDate = new Date(dashDate.getTime()+86400000);
+  else                         dashDate = new Date(dashDate.getFullYear()+1, 0, 1);
+  renderDashChart(dashDate.getFullYear(), dashDate.getMonth()+1);
+}
+
+// ════════════════════════════════════════
+// 経費一覧
+// ════════════════════════════════════════
+function toggleFilter() { document.getElementById('filter-panel').classList.toggle('open'); }
+function resetFilter() {
+  ['fl-s','fl-e','fl-st','fl-cat','fl-min','fl-max'].forEach(id => document.getElementById(id).value = '');
+  loadExpenses();
+}
+
+async function loadExpenses() {
+  document.getElementById('list-tbody').innerHTML = '<tr><td colspan="7"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div></td></tr>';
+  try {
+    const params = new URLSearchParams();
+    const s = document.getElementById('fl-s').value,  e = document.getElementById('fl-e').value;
+    const st= document.getElementById('fl-st').value, ci= document.getElementById('fl-cat').value;
+    const mn= document.getElementById('fl-min').value,mx= document.getElementById('fl-max').value;
+    const so= document.getElementById('sort-sel').value;
+    if(s)  params.set('date_from', s);
+    if(e)  params.set('date_to', e);
+    if(st) params.set('status', st);
+    if(ci) params.set('category_id', ci);
+    if(so) params.set('sort', so);
+    allExpenses = await apiJSON('/api/expenses?' + params.toString());
+
+    // Client-side amount filter
+    if(mn) allExpenses = allExpenses.filter(x => x.amount >= parseInt(mn));
+    if(mx) allExpenses = allExpenses.filter(x => x.amount <= parseInt(mx));
+
+    const total = allExpenses.reduce((a, x) => a + x.amount, 0);
+    document.getElementById('list-info').textContent      = `${allExpenses.length}件`;
+    document.getElementById('list-total-lbl').textContent = `合計: ${fmt(total)}`;
+    renderListPage();
+  } catch(e) { showToast(e.message, true); }
+}
+
+function renderListPage() {
+  const paged = allExpenses.slice((lPage-1)*PG, lPage*PG);
+  const tbody = document.getElementById('list-tbody');
+  if (!allExpenses.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9E9E9E;padding:48px"><i class="fa-solid fa-inbox" style="font-size:32px;display:block;margin-bottom:10px"></i>条件に一致する経費がありません</td></tr>';
+  } else {
+    tbody.innerHTML = paged.map(e => `
+      <tr>
+        <td onclick="showDetail(${e.id})">${fmtD(e.expense_date)}</td>
+        <td onclick="showDetail(${e.id})" style="font-weight:700;color:#1B5E20">${fmt(e.amount)}</td>
+        <td onclick="showDetail(${e.id})">${e.category.name}</td>
+        <td onclick="showDetail(${e.id})" style="color:#9E9E9E;font-size:12px">${e.location||'-'}</td>
+        <td onclick="showDetail(${e.id})" style="color:#BDBDBD;font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.note||'-'}</td>
+        <td onclick="showDetail(${e.id})">${badge(e.status)}</td>
+        <td style="text-align:center">
+          ${e.status==='pending'?`<button onclick="deleteExpense(${e.id})" style="background:none;border:none;color:#EF5350;cursor:pointer" title="削除"><i class="fa-solid fa-trash" style="font-size:13px"></i></button>`:'-'}
+        </td>
+      </tr>`).join('');
+  }
+  // Pagination
+  const tp = Math.ceil(allExpenses.length / PG);
+  const pg = document.getElementById('list-pagination');
+  pg.innerHTML = tp > 1 ? Array.from({length:tp},(_,i)=>i+1).map(i =>
+    `<button onclick="goPage(${i})" class="btn ${i===lPage?'bp':'bs'} bsm">${i}</button>`).join('') : '';
+}
+function goPage(n) { lPage = n; renderListPage(); }
+
+async function deleteExpense(id) {
+  if (!confirm('この経費を削除しますか？')) return;
+  try {
+    await apiFetch(`/api/expenses/${id}`, { method: 'DELETE' });
+    showToast('削除しました'); loadExpenses();
+  } catch(e) { showToast(e.message, true); }
+}
+
+// ════════════════════════════════════════
+// 経費申請フォーム
+// ════════════════════════════════════════
+async function submitForm(ev) {
+  ev.preventDefault();
+  try {
+    await apiJSON('/api/expenses', {
+      method: 'POST',
+      body: JSON.stringify({
+        amount:       parseInt(document.getElementById('fm-amount').value),
+        category_id:  parseInt(document.getElementById('fm-cat').value),
+        location:     document.getElementById('fm-loc').value,
+        expense_date: document.getElementById('fm-date').value,
+        note:         document.getElementById('fm-note').value,
+      })
+    });
+    document.getElementById('exp-form').reset();
+    document.getElementById('fm-date').value = new Date().toISOString().split('T')[0];
+    const s = document.getElementById('form-success');
+    s.style.display = 'flex'; setTimeout(() => s.style.display = 'none', 4000);
+    showToast('申請を登録しました！');
+    // 承認待ちバッジ更新
+    const sum = await apiJSON(`/api/analytics/summary?year=2026&month=2`);
+    document.getElementById('pending-badge').textContent = sum.pending_count;
+  } catch(e) { showToast(e.message, true); }
+}
+function resetForm() {
+  document.getElementById('exp-form').reset();
+  document.getElementById('fm-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('form-success').style.display = 'none';
+}
+
+// ════════════════════════════════════════
+// 承認管理
+// ════════════════════════════════════════
+function setApFilter(f) {
+  apFilter = f;
+  document.getElementById('af-p').className = 'btn bsm ' + (f==='pending'?'bp':'bs');
+  document.getElementById('af-a').className = 'btn bsm ' + (f==='all'?'bp':'bs');
+  loadApproval();
+}
+
+async function loadApproval() {
+  document.getElementById('approval-list').innerHTML = '<div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div>';
+  try {
+    const params = apFilter === 'pending' ? '?status=pending' : '';
+    const list = await apiJSON('/api/expenses' + params);
+    document.getElementById('ap-subtitle').textContent = apFilter==='pending' ? `承認待ち ${list.length}件` : `全 ${list.length}件`;
+    const c = document.getElementById('approval-list');
+    if (!list.length) {
+      c.innerHTML = '<div style="background:white;border-radius:14px;padding:60px;text-align:center;color:#BDBDBD;box-shadow:0 2px 10px rgba(0,0,0,.07)"><i class="fa-solid fa-check-circle" style="font-size:40px;color:#A5D6A7;display:block;margin-bottom:12px"></i>承認待ちの申請はありません</div>';
+      return;
+    }
+    c.innerHTML = list.map(e => `
+      <div class="apcard">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              ${badge(e.status)}
+              <span style="font-size:12px;color:#9E9E9E">${fmtD(e.expense_date)}</span>
+              <span style="font-size:12px;color:#BDBDBD">${e.user.name}（${e.user.department}）</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:24px;font-weight:800;color:#1B5E20">${fmt(e.amount)}</span>
+              <span style="background:#E8F5E9;color:#2E7D32;font-size:12px;padding:4px 12px;border-radius:999px;font-weight:600">${e.category.name}</span>
+            </div>
+            ${e.location?`<div style="font-size:12px;color:#9E9E9E;margin-top:6px"><i class="fa-solid fa-location-dot" style="margin-right:4px"></i>${e.location}</div>`:''}
+            ${e.note?`<div style="font-size:13px;color:#666;margin-top:6px">${e.note}</div>`:''}
+          </div>
+          <div style="margin-left:16px">
+            ${e.status==='pending' ? `
+            <div style="display:flex;gap:6px">
+              <button onclick="doApprove(${e.id})" class="btn bp bsm"><i class="fa-solid fa-check"></i> 承認</button>
+              <button onclick="doReject(${e.id})"  class="btn bd bsm"><i class="fa-solid fa-xmark"></i> 否認</button>
+            </div>` : `<div style="font-size:12px;color:#9E9E9E;text-align:right">
+              ${e.status==='approved'?'<i class="fa-solid fa-check" style="color:#2E7D32"></i> 承認済み':'<i class="fa-solid fa-xmark" style="color:#C62828"></i> 否認'}
+              ${e.approved_at?`<br><span style="font-size:11px">${fmtD(e.approved_at)}</span>`:''}
+            </div>`}
+          </div>
+        </div>
+      </div>`).join('');
+  } catch(e) { showToast(e.message, true); }
+}
+
+async function doApprove(id) {
+  try { await apiJSON(`/api/expenses/${id}/approve`,{method:'POST'}); showToast('承認しました'); loadApproval(); }
+  catch(e) { showToast(e.message,true); }
+}
+async function doReject(id) {
+  try { await apiJSON(`/api/expenses/${id}/reject`,{method:'POST'}); showToast('否認しました'); loadApproval(); }
+  catch(e) { showToast(e.message,true); }
+}
+
+// ════════════════════════════════════════
+// 分析レポート
+// ════════════════════════════════════════
+function setAnlMode(m) {
+  anlMode = m;
+  const aBtn = s => `padding:7px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:${s?'#2E7D32':'none'};color:${s?'white':'#9E9E9E'}`;
+  document.getElementById('anl-m').style.cssText = aBtn(m==='month');
+  document.getElementById('anl-y').style.cssText = aBtn(m==='year');
+  renderAnalytics();
+}
+
+async function renderAnalytics() {
+  const period = document.getElementById('anl-period').value;
+  const yr     = parseInt(period.split('-')[0]);
+  const mo     = period.length === 7 ? parseInt(period.split('-')[1]) : null;
+  try {
+    const [catData, monthData] = await Promise.all([
+      apiJSON(`/api/analytics/category?year=${yr}${mo?'&month='+mo:''}`),
+      apiJSON(`/api/analytics/monthly?year=${yr}`)
+    ]);
+    const total = catData.reduce((a,c) => a + c.total, 0);
+    document.getElementById('anl-total').textContent = `合計: ${fmt(total)}（${catData.reduce((a,c)=>a+c.count,0)}件）`;
+
+    // Pie chart
+    const pCtx = document.getElementById('pie-chart').getContext('2d');
+    if (pieChartObj) pieChartObj.destroy();
+    pieChartObj = new Chart(pCtx, {
+      type:'doughnut',
+      data:{ labels:catData.map(c=>c.category_name), datasets:[{ data:catData.map(c=>c.total), backgroundColor:GCOLS.slice(0,catData.length), borderColor:'white', borderWidth:2 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{font:{size:11},boxWidth:12}} } }
+    });
+
+    // Bar chart
+    const bCtx = document.getElementById('bar-chart').getContext('2d');
+    if (barChartObj) barChartObj.destroy();
+    barChartObj = new Chart(bCtx, {
+      type:'bar',
+      data:{ labels:monthData.map(m=>m.label), datasets:[{ label:'合計（円）', data:monthData.map(m=>m.total), backgroundColor:'rgba(46,125,50,.75)', borderColor:'#2E7D32', borderWidth:1, borderRadius:4 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+        scales:{ y:{beginAtZero:true,grid:{color:'#F5F5F5'},ticks:{callback:v=>v>=1000?'¥'+(v/1000)+'k':'¥'+v,font:{size:10}}}, x:{grid:{display:false},ticks:{font:{size:10}}} } }
+    });
+
+    // Summary table
+    document.getElementById('anl-tbody').innerHTML = catData.map(c => `
+      <tr>
+        <td style="font-weight:600">${c.category_name}</td>
+        <td style="text-align:center">${c.count}件</td>
+        <td style="font-weight:700;color:#1B5E20">${fmt(c.total)}</td>
+        <td>${fmt(c.avg)}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="pb" style="flex:1"><div class="pf" style="width:${c.ratio}%"></div></div>
+            <span style="font-size:12px;color:#9E9E9E;width:38px;text-align:right">${c.ratio}%</span>
+          </div>
+        </td>
+      </tr>`).join('');
+  } catch(e) { showToast(e.message, true); }
+}
+
+// ════════════════════════════════════════
+// 出力・印刷
+// ════════════════════════════════════════
+async function renderExport() {
+  try {
+    const params = new URLSearchParams();
+    const s=document.getElementById('ex-s').value, e=document.getElementById('ex-e').value;
+    const ci=document.getElementById('ex-cat').value, st=document.getElementById('ex-st').value;
+    if(s)  params.set('date_from',s); if(e) params.set('date_to',e);
+    if(ci) params.set('category_id',ci); if(st) params.set('status',st);
+    const list = await apiJSON('/api/expenses?' + params.toString());
+    const total = list.reduce((a,x)=>a+x.amount,0);
+    document.getElementById('ex-total').textContent = `合計: ${fmt(total)}（${list.length}件）`;
+    document.getElementById('ex-tbody').innerHTML = list.map(e => `
+      <tr>
+        <td>${fmtD(e.expense_date)}</td>
+        <td style="font-size:12px">${e.user.name}</td>
+        <td style="font-weight:700;color:#1B5E20">${fmt(e.amount)}</td>
+        <td>${e.category.name}</td>
+        <td style="font-size:12px;color:#9E9E9E">${e.location||'-'}</td>
+        <td>${badge(e.status)}</td>
+      </tr>`).join('');
+  } catch(e) { showToast(e.message,true); }
+}
+
+async function doCSVExport() {
+  try {
+    const params = new URLSearchParams();
+    const s=document.getElementById('ex-s').value, e=document.getElementById('ex-e').value;
+    const ci=document.getElementById('ex-cat').value, st=document.getElementById('ex-st').value;
+    if(s)  params.set('date_from',s); if(e) params.set('date_to',e);
+    if(ci) params.set('category_id',ci); if(st) params.set('status',st);
+    const token = localStorage.getItem('exflow_token');
+    const res = await fetch(`/api/export/csv?${params}`, { headers:{'Authorization':'Bearer '+token} });
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `経費一覧_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showToast('CSW�2ダウンロードしました');
+  } catch(e) { showToast(e.message, true); }
+}
+
+// ════════════════════════════════════════
+// 経費詳細モーダル
+// ════════════════════════════════════════
+async function showDetail(id) {
+  try {
+    const e = await apiJSON(`/api/expenses/${id}`);
+    showModal(`
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        ${badge(e.status)}<span style="color:#BDBDBD;font-size:12px">#${e.id}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="background:#F9FBF9;border-radius:10px;padding:14px">
+          <div style="font-size:11px;color:#9E9E9E">金額</div>
+          <div style="font-size:24px;font-weight:800;color:#1B5E20;margin-top:4px">${fmt(e.amount)}</div>
+        </div>
+        <div style="background:#F9FBF9;border-radius:10px;padding:14px">
+          <div style="font-size:11px;color:#9E9E9E">発生日</div>
+          <div style="font-size:15px;font-weight:700;color:#333;margin-top:4px">${fmtD(e.expense_date)}</div>
+        </div>
+        <div style="background:#F9FBF9;border-radius:10px;padding:14px">
+          <div style="font-size:11px;color:#9E9E9E">経費科目</div>
+          <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px">${e.category.name}</div>
+        </div>
+        <div style="background:#F9FBF9;border-radius:10px;padding:14px">
+          <div style="font-size:11px;color:#9E9E9E">申請者</div>
+          <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px">${e.user.name}
+            <span style="font-size:11px;color:#9E9E9E;font-weight:400;margin-left:4px">${e.user.department}</span></div>
+        </div>
+      </div>
+      ${e.location?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">使用場所</span><div style="font-size:13px;margin-top:4px">${e.location}</div></div>`:''}
+      ${e.note?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">備考</span><div style="font-size:13px;margin-top:4px">${e.note}</div></div>`:''}
+      ${e.approved_at?`<div style="font-size:11px;color:#BDBDBD;text-align:right;margin-top:6px">承認: ${fmtD(e.approved_at)} / ${e.approver?.name||''}</div>`:''}
+      ${CU?.role==='admin'&&e.status==='pending'?`
+      <div style="display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid #EEE">
+        <button onclick="doApprove(${e.id});closeModal()" class="btn bp" style="flex:1;justify-content:center"><i class="fa-solid fa-check"></i> 承認</button>
+        <button onclick="doReject(${e.id});closeModal()"  class="btn bd" style="flex:1;justify-content:center"><i class="fa-solid fa-xmark"></i> 否認</button>
+      </div>`:''}`);
+  } catch(e) { showToast(e.message, true); }
+}
+
+// ════════════════════════════════════════
+// 起動
+// ════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+</body>
+</html>
