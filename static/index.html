@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ExFlow｜経費管理システム</title>
+<title>ExFlowéæ»ç¥µç¨è¤î¸éåå¡éå¹¿åéï¿½</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -11,7 +11,7 @@
 * { box-sizing:border-box; font-family:'Segoe UI','Hiragino Sans','Meiryo',sans-serif; }
 body { background:#F4F6F8; margin:0; }
 
-/* ── Sidebar ── */
+/* é¹ï¿½é¹ï¿½ Sidebar é¹ï¿½é¹ï¿½ */
 #sidebar { width:240px; background:linear-gradient(180deg,#1B5E20 0%,#2E7D32 100%);
            position:fixed; top:0; left:0; height:100vh; z-index:100; display:flex; flex-direction:column; }
 .nav-item { cursor:pointer; transition:.15s; display:flex; align-items:center; gap:12px;
@@ -20,35 +20,35 @@ body { background:#F4F6F8; margin:0; }
 .nav-item.active { background:rgba(255,255,255,.18); border-left:4px solid #A5D6A7;
                    color:white; font-weight:600; padding-left:16px; }
 
-/* ── Pages ── */
+/* é¹ï¿½é¹ï¿½ Pages é¹ï¿½é¹ï¿½ */
 .page { display:none; }  .page.active { display:block; }
 
-/* ── Tabs ── */
+/* é¹ï¿½é¹ï¿½ Tabs é¹ï¿½é¹ï¿½ */
 .tab { cursor:pointer; padding:9px 22px; border-bottom:3px solid transparent;
        font-size:13px; color:#757575; font-weight:500; transition:.15s; }
 .tab.active { border-bottom-color:#2E7D32; color:#2E7D32; font-weight:700; }
 .tab:hover  { color:#2E7D32; }
 
-/* ── Status badges ── */
+/* é¹ï¿½é¹ï¿½ Status badges é¹ï¿½é¹ï¿½ */
 .badge { font-size:11px; padding:3px 10px; border-radius:999px; font-weight:600; white-space:nowrap; }
 .b-pending  { background:#FFF8E1; color:#E65100; border:1px solid #FFCC80; }
 .b-approved { background:#E8F5E9; color:#2E7D32; border:1px solid #A5D6A7; }
 .b-rejected { background:#FFEBEE; color:#C62828; border:1px solid #FFCDD2; }
 
-/* ── Table ── */
+/* é¹ï¿½é¹ï¿½ Table é¹ï¿½é¹ï¿½ */
 .dtbl { width:100%; border-collapse:collapse; }
 .dtbl th { background:#1B5E20; color:white; padding:10px 14px; text-align:left; font-size:12px; font-weight:600; white-space:nowrap; }
 .dtbl td { padding:9px 14px; border-bottom:1px solid #EEE; font-size:13px; vertical-align:middle; }
 .dtbl tbody tr:hover td { background:#F1F8E9; cursor:pointer; }
 .dtbl tbody tr:last-child td { border-bottom:none; }
 
-/* ── Cards ── */
+/* é¹ï¿½é¹ï¿½ Cards é¹ï¿½é¹ï¿½ */
 .scard { background:white; border-radius:14px; padding:20px 22px; box-shadow:0 2px 10px rgba(0,0,0,.07); }
 .apcard { background:white; border-radius:14px; padding:18px 20px; margin-bottom:12px;
           box-shadow:0 2px 8px rgba(0,0,0,.07); transition:.2s; }
 .apcard:hover { box-shadow:0 4px 16px rgba(0,0,0,.12); }
 
-/* ── Buttons ── */
+/* é¹ï¿½é¹ï¿½ Buttons é¹ï¿½é¹ï¿½ */
 .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px;
        border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:.15s; }
 .bp { background:#2E7D32; color:white; } .bp:hover { background:#1B5E20; }
@@ -56,36 +56,36 @@ body { background:#F4F6F8; margin:0; }
 .bd { background:#C62828; color:white; } .bd:hover { background:#B71C1C; }
 .bsm { padding:5px 12px; font-size:12px; }
 
-/* ── Form ── */
+/* é¹ï¿½é¹ï¿½ Form é¹ï¿½é¹ï¿½ */
 .fi { border:1.5px solid #BDBDBD; border-radius:8px; padding:8px 12px; width:100%;
       font-size:13.5px; transition:.15s; background:white; }
 .fi:focus { outline:none; border-color:#2E7D32; box-shadow:0 0 0 3px rgba(46,125,50,.1); }
 .fl { display:block; font-size:12px; font-weight:600; color:#555; margin-bottom:5px; }
 .req { color:#E53935; }
 
-/* ── Filter panel ── */
+/* é¹ï¿½é¹ï¿½ Filter panel é¹ï¿½é¹ï¿½ */
 #filter-panel { display:none; border-top:1px solid #EEE; }
 #filter-panel.open { display:block; }
 
-/* ── Progress bar ── */
+/* é¹ï¿½é¹ï¿½ Progress bar é¹ï¿½é¹ï¿½ */
 .pb { height:6px; background:#E0E0E0; border-radius:3px; overflow:hidden; }
-.pf { height:100%; background:#2E7D32; border-radius:3�x; transition:.3s; }
+.pf { height:100%; background:#2E7D32; border-radius:3î; transition:.3s; }
 
-/* ── Modal ── */
+/* é¹ï¿½é¹ï¿½ Modal é¹ï¿½é¹ï¿½ */
 #modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
                  z-index:1000; align-items:center; justify-content:center; }
 #modal-overlay.open { display:flex; }
 #modal-box { background:white; border-radius:16px; width:520px; max-width:95vw; padding:28px;
              box-shadow:0 20px 60px rgba(0,0,0,.2); }
 
-/* ── Login screen ── */
+/* é¹ï¿½é¹ï¿½ Login screen é¹ï¿½é¹ï¿½ */
 #login-screen { display:none; position:fixed; inset:0; background:linear-gradient(135deg,#1B5E20,#2E7D32,#43A047);
                 z-index:200; align-items:center; justify-content:center; }
 #login-screen.show { display:flex; }
 #login-box { background:white; border-radius:20px; padding:40px 36px; width:400px;
              box-shadow:0 24px 80px rgba(0,0,0,.3); }
 
-/* ── Toast ── */
+/* é¹ï¿½é¹ï¿½ Toast é¹ï¿½é¹ï¿½ */
 #toast { position:fixed; bottom:24px; right:24px; background:#2E7D32; color:white;
          padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600;
          display:none; z-index:2000; box-shadow:0 4px 16px rgba(0,0,0,.2);
@@ -93,7 +93,7 @@ body { background:#F4F6F8; margin:0; }
 #toast.show { display:flex; }
 #toast.err { background:#C62828; }
 
-/* ── Loading spinner ── */
+/* é¹ï¿½é¹ï¿½ Loading spinner é¹ï¿½é¹ï¿½ */
 .spinner { display:flex; align-items:center; justify-content:center; padding:50px; color:#9E9E9E; flex-direction:column; gap:12px; }
 
 ::-webkit-scrollbar { width:5px; }
@@ -108,7 +108,7 @@ body { background:#F4F6F8; margin:0; }
 </head>
 <body>
 
-<!-- ═══ LOGIN ═══ -->
+<!-- éºæ¨æ²éºï¿½ LOGIN éºæ¨æ²éºï¿½ -->
 <div id="login-screen" class="show">
   <div id="login-box">
     <div style="text-align:center;margin-bottom:28px">
@@ -116,31 +116,31 @@ body { background:#F4F6F8; margin:0; }
         <i class="fa-solid fa-receipt" style="color:#1B5E20;font-size:24px"></i>
       </div>
       <div style="font-size:22px;font-weight:800;color:#1B5E20">ExFlow</div>
-      <div style="font-size:13px;color:#9E9E9E;margin-top:4px">経費管理システム</div>
+      <div style="font-size:13px;color:#9E9E9E;margin-top:4px">ç»²å²ä¸ç» ï¼æéæ«å£éåå¬</div>
     </div>
     <div id="login-error" style="display:none;background:#FFEBEE;border:1px solid #FFCDD2;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#C62828"></div>
     <form onsubmit="doLogin(event)">
       <div style="margin-bottom:14px">
-        <label class="fl">メールアドレス</label>
-        <input type="email" id="login-email" class="fi" placeholder="例：tanaka@example.com" required>
+        <label class="fl">éÂ°åéî åéå¤å¸éï¿½</label>
+        <input type="email" id="login-email" class="fi" placeholder="æ¸å¬¶ç´°tanaka@example.com" required>
       </div>
       <div style="margin-bottom:20px">
-        <label class="fl">パスワード</label>
-        <input type="password" id="login-pass" class="fi" placeholder="パスワードを入力" required>
+        <label class="fl">éæå£éîåéï¿½</label>
+        <input type="password" id="login-pass" class="fi" placeholder="éæå£éîåéå¤å°éã¥å§" required>
       </div>
       <button type="submit" class="btn bp" style="width:100%;justify-content:center;padding:12px">
-        <i class="fa-solid fa-right-to-bracket"></i> ログイン
+        <i class="fa-solid fa-right-to-bracket"></i> éîåéãå
       </button>
     </form>
     <div style="margin-top:20px;padding:14px;background:#F9FBF9;border-radius:10px;font-size:12px;color:#888">
-      <div style="font-weight:600;color:#555;margin-bottom:6px">デモ用アカウント</div>
-      <div>一般社員: tanaka@example.com / password123</div>
-      <div style="margin-top:2px">社長: yamada@example.com / admin1234</div>
+      <div style="font-weight:600;color:#555;margin-bottom:6px">éå¥å®é¢ã£åéî åéç½å</div>
+      <div>æ¶ï¿½é¸îãéï¿½: tanaka@example.com / password123</div>
+      <div style="margin-top:2px">ç»é¹æ¦: yamada@example.com / admin1234</div>
     </div>
   </div>
 </div>
 
-<!-- ═══ SIDEBAR ═══ -->
+<!-- éºæ¨æ²éºï¿½ SIDEBAR éºæ¨æ²éºï¿½ -->
 <div id="sidebar">
   <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.15)">
     <div style="display:flex;align-items:center;gap:10px">
@@ -149,25 +149,25 @@ body { background:#F4F6F8; margin:0; }
       </div>
       <div>
         <div style="color:white;font-weight:800;font-size:16px">ExFlow</div>
-        <div style="color:#A5D6A7;font-size:11px">経費管理システム</div>
+        <div style="color:#A5D6A7;font-size:11px">ç»²å²ä¸ç» ï¼æéæ«å£éåå¬</div>
       </div>
     </div>
   </div>
   <nav style="flex:1;padding:8px 0;overflow-y:auto">
     <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
-      <i class="fa-solid fa-gauge-high" style="width:18px;text-align:center"></i>ダッシュボード</div>
+      <i class="fa-solid fa-gauge-high" style="width:18px;text-align:center"></i>éï¿½éå¦å¡éã£å¨éç¬ºå</div>
     <div class="nav-item" data-page="expenses" onclick="showPage('expenses')">
-      <i class="fa-solid fa-list-ul"     style="width:18px;text-align:center"></i>経費一覧</div>
+      <i class="fa-solid fa-list-ul"     style="width:18px;text-align:center"></i>ç»²å²ä¸æ¶ï¿½çï¿½</div>
     <div class="nav-item" data-page="form" onclick="showPage('form')">
-      <i class="fa-solid fa-plus-circle" style="width:18px;text-align:center"></i>経費申請</div>
+      <i class="fa-solid fa-plus-circle" style="width:18px;text-align:center"></i>ç»²å²ä¸é¢å® ç</div>
     <div class="nav-item" data-page="approval" id="nav-approval" onclick="showPage('approval')" style="display:none">
-      <i class="fa-solid fa-check-double" style="width:18px;text-align:center"></i>承認管理
+      <i class="fa-solid fa-check-double" style="width:18px;text-align:center"></i>éµè¯çç» ï¼æ
       <span id="pending-badge" style="margin-left:auto;background:#EF5350;color:white;font-size:11px;border-radius:999px;padding:1px 8px">0</span>
     </div>
     <div class="nav-item" data-page="analytics" onclick="showPage('analytics')">
-      <i class="fa-solid fa-chart-pie"   style="width:18px;text-align:center"></i>分析レポート</div>
+      <i class="fa-solid fa-chart-pie"   style="width:18px;text-align:center"></i>éåç½éî¾å©éç¬ºå</div>
     <div class="nav-item" data-page="export" onclick="showPage('export')">
-      <i class="fa-solid fa-file-export" style="width:18px;text-align:center"></i>出力・印刷</div>
+      <i class="fa-solid fa-file-export" style="width:18px;text-align:center"></i>éåå§éè¯²åµéï¿½</div>
   </nav>
   <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:10px">
     <div id="uavatar" style="width:34px;height:34px;background:#66BB6A;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#1B5E20;font-weight:800;font-size:14px">?</div>
@@ -175,16 +175,16 @@ body { background:#F4F6F8; margin:0; }
       <div id="uname" style="color:white;font-size:13px;font-weight:600">-</div>
       <div id="udept" style="color:#A5D6A7;font-size:11px">-</div>
     </div>
-    <button onclick="doLogout()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:16px" title="ログアウト">
+    <button onclick="doLogout()" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:16px" title="éîåéâ¬åéï¿½">
       <i class="fa-solid fa-right-from-bracket"></i>
     </button>
   </div>
 </div>
 
-<!-- ═══ MAIN ═══ -->
+<!-- éºæ¨æ²éºï¿½ MAIN éºæ¨æ²éºï¿½ -->
 <div id="main" style="margin-left:240px;display:flex;flex-direction:column;min-height:100vh">
   <div id="header-bar" style="background:white;border-bottom:1px solid #E0E0E0;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
-    <h1 id="page-title" style="font-size:17px;font-weight:700;color:#212121;margin:0">ダッシュボード</h1>
+    <h1 id="page-title" style="font-size:17px;font-weight:700;color:#212121;margin:0">éï¿½éå¦å¡éã£å¨éç¬ºå</h1>
     <div style="display:flex;align-items:center;gap:16px">
       <span style="font-size:12px;color:#9E9E9E" id="today-label"></span>
       <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#555">
@@ -197,12 +197,12 @@ body { background:#F4F6F8; margin:0; }
 
   <div style="flex:1;padding:24px 28px">
 
-    <!-- ══ DASHBOARD ══ -->
+    <!-- éºæ¨æ² DASHBOARD éºæ¨æ² -->
     <div id="page-dashboard" class="page active">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
         <div class="scard">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <span style="font-size:12px;color:#9E9E9E;font-weight:600">今月の経費合計</span>
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">æµ å©æ¹éî¾ç¥µç¨è¯²æç·ï¿½</span>
             <div style="width:36px;height:36px;background:#E8F5E9;border-radius:50%;display:flex;align-items:center;justify-content:center">
               <i class="fa-solid fa-yen-sign" style="color:#2E7D32;font-size:14px"></i></div>
           </div>
@@ -211,29 +211,29 @@ body { background:#F4F6F8; margin:0; }
         </div>
         <div class="scard">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <span style="font-size:12px;color:#9E9E9E;font-weight:600">今月の件数</span>
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">æµ å©æ¹éî»æ¬¢éï¿½</span>
             <div style="width:36px;height:36px;background:#E3F2FD;border-radius:50%;display:flex;align-items:center;justify-content:center">
               <i class="fa-solid fa-file-invoice" style="color:#1565C0;font-size:14px"></i></div>
           </div>
           <div id="s-month-count" style="font-size:26px;font-weight:800;color:#212121">-</div>
-          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">申請件数</div>
+          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">é¢å® çæµ èµæ</div>
         </div>
         <div class="scard">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <span style="font-size:12px;color:#9E9E9E;font-weight:600">承認待ち</span>
+            <span style="font-size:12px;color:#9E9E9E;font-weight:600">éµè¯çå¯°å«ä»­</span>
             <div style="width:36px;height:36px;background:#FFF3E0;border-radius:50%;display:flex;align-items:center;justify-content:center">
               <i class="fa-solid fa-clock" style="color:#E65100;font-size:14px"></i></div>
           </div>
           <div id="s-pending" style="font-size:26px;font-weight:800;color:#E65100">-</div>
-          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">未承認の経費</div>
+          <div style="font-size:11px;color:#BDBDBD;margin-top:4px">éîå£ç¾å¶ä¼ç»²å²ä¸</div>
         </div>
       </div>
 
       <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:20px">
         <div style="display:flex;border-bottom:1px solid #EEE;padding:0 20px">
-          <div class="tab active" onclick="setDashTab('monthly',this)">月次</div>
-          <div class="tab"        onclick="setDashTab('daily',this)">日次</div>
-          <div class="tab"        onclick="setDashTab('yearly',this)">年次</div>
+          <div class="tab active" onclick="setDashTab('monthly',this)">éå î¼</div>
+          <div class="tab"        onclick="setDashTab('daily',this)">éã¦î¼</div>
+          <div class="tab"        onclick="setDashTab('yearly',this)">éªå­î¼</div>
         </div>
         <div style="padding:20px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -243,192 +243,192 @@ body { background:#F4F6F8; margin:0; }
           </div>
           <div style="height:220px;position:relative"><canvas id="dash-chart"></canvas></div>
           <div style="margin-top:14px;text-align:center;padding-top:12px;border-top:1px solid #F5F5F5">
-            <span style="color:#9E9E9E;font-size:13px">期間合計: </span>
-            <span id="dash-period-total" style="color:#1B5E20;font-weight:800;font-size:17px">¥0</span>
-            <span id="dash-period-count" style="color:#BDBDBD;font-size:12px;margin-left:6px">（0件）</span>
+            <span style="color:#9E9E9E;font-size:13px">éç¼æéå £â: </span>
+            <span id="dash-period-total" style="color:#1B5E20;font-weight:800;font-size:17px">æ¥¼0</span>
+            <span id="dash-period-count" style="color:#BDBDBD;font-size:12px;margin-left:6px">éï¿½0æµ è®¹ç´</span>
           </div>
         </div>
       </div>
 
       <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #EEE">
-          <span style="font-weight:700;color:#333;font-size:14px">直近の申請</span>
-          <button onclick="showPage('expenses')" style="background:none;border:none;color:#2E7D32;font-size:12px;cursor:pointer;font-weight:600">すべて見る →</button>
+          <span style="font-weight:700;color:#333;font-size:14px">é©ç£ç¹éî¾æµçï¿½</span>
+          <button onclick="showPage('expenses')" style="background:none;border:none;color:#2E7D32;font-size:12px;cursor:pointer;font-weight:600">éæ¬ä¼éï¹î°éï¿½ é«ï¿½</button>
         </div>
         <div style="overflow-x:auto">
-          <table class="dtbl"><thead><tr><th>日付</th><th>金額</th><th>科目</th><th>使用場所</th><th>ステータス</th></tr></thead>
-          <tbody id="recent-tbody"><tr><td colspan="5"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div></td></tr></tbody></table>
+          <table class="dtbl"><thead><tr><th>éã¤ç²¯</th><th>é²æ¦î</th><th>ç»æ æ´°</th><th>æµ£è·¨æ¤é«å­å¢</th><th>éå¹¿åéç¬ºåªéï¿½</th></tr></thead>
+          <tbody id="recent-tbody"><tr><td colspan="5"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>ç¾îä¼©æç¬ºä¼©æ¶ï¿½...</div></td></tr></tbody></table>
         </div>
       </div>
     </div><!-- /dashboard -->
 
-    <!-- ══ EXPENSE LIST ══ -->
+    <!-- éºæ¨æ² EXPENSE LIST éºæ¨æ² -->
     <div id="page-expenses" class="page">
       <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px">
           <button onclick="toggleFilter()" class="btn bs bsm no-print">
-            <i class="fa-solid fa-filter"></i> フィルター
+            <i class="fa-solid fa-filter"></i> éæåéî åªéï¿½
           </button>
           <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:12px;color:#9E9E9E">並び替え:</span>
+            <span style="font-size:12px;color:#9E9E9E">æ¶ï¸ºä¼éè£¤äºª:</span>
             <select id="sort-sel" onchange="loadExpenses()" class="fi" style="width:auto;font-size:12px;padding:5px 8px">
-              <option value="date_desc">日付（新しい順）</option>
-              <option value="date_asc">日付（古い順）</option>
-              <option value="amount_desc">金額（高い順）</option>
-              <option value="amount_asc">金額（低い順）</option>
+              <option value="date_desc">éã¤ç²¯éå æéæ¤¼äºéå­ç´</option>
+              <option value="date_asc">éã¤ç²¯éå å½éå¯ç¢éï¿½</option>
+              <option value="amount_desc">é²æ¦îéå ¥ç®éå¯ç¢éï¿½</option>
+              <option value="amount_asc">é²æ¦îéå ç¶éå¯ç¢éï¿½</option>
             </select>
           </div>
         </div>
         <div id="filter-panel" style="padding:0 20px 16px">
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
-            <div><label class="fl">開始日</label><input type="date" id="fl-s" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
-            <div><label class="fl">終了日</label><input type="date" id="fl-e" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
-            <div><label class="fl">ステータス</label>
+            <div><label class="fl">éå¬ªîéï¿½</label><input type="date" id="fl-s" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
+            <div><label class="fl">ç»²åç°¡éï¿½</label><input type="date" id="fl-e" class="fi" style="font-size:12px" onchange="loadExpenses()"></div>
+            <div><label class="fl">éå¹¿åéç¬ºåªéï¿½</label>
               <select id="fl-st" class="fi" style="font-size:12px" onchange="loadExpenses()">
-                <option value="">すべて</option><option value="pending">承認待ち</option>
-                <option value="approved">承認済み</option><option value="rejected">否認</option>
+                <option value="">éæ¬ä¼éï¿½</option><option value="pending">éµè¯çå¯°å«ä»­</option>
+                <option value="approved">éµè¯çå¨å ä¼©</option><option value="rejected">éï¹ç</option>
               </select></div>
-            <div><label class="fl">経費科目</label>
+            <div><label class="fl">ç»²å²ä¸ç»æ æ´°</label>
               <select id="fl-cat" class="fi" style="font-size:12px" onchange="loadExpenses()">
-                <option value="">すべて</option></select></div>
+                <option value="">éæ¬ä¼éï¿½</option></select></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-top:10px">
-            <div><label class="fl">最小金額（円）</label><input type="number" id="fl-min" class="fi" style="font-size:12px" placeholder="0" onchange="loadExpenses()"></div>
-            <div><label class="fl">最大金額（円）</label><input type="number" id="fl-max" class="fi" style="font-size:12px" placeholder="上限なし" onchange="loadExpenses()"></div>
-            <div style="display:flex;align-items:flex-end"><button onclick="resetFilter()" class="btn bs bsm">リセット</button></div>
+            <div><label class="fl">éï¿½çå¿å¾æ¤¤å¶ç´éå­ç´</label><input type="number" id="fl-min" class="fi" style="font-size:12px" placeholder="0" onchange="loadExpenses()"></div>
+            <div><label class="fl">éï¿½æ¾¶Ñå¾æ¤¤å¶ç´éå­ç´</label><input type="number" id="fl-max" class="fi" style="font-size:12px" placeholder="æ¶å©æªºéîä»" onchange="loadExpenses()"></div>
+            <div style="display:flex;align-items:flex-end"><button onclick="resetFilter()" class="btn bs bsm">éîå¦éå¦å</button></div>
           </div>
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-        <span id="list-info" style="font-size:13px;color:#9E9E9E">0件</span>
-        <span id="list-total-lbl" style="font-size:13px;font-weight:700;color:#1B5E20">合計: ¥0</span>
+        <span id="list-info" style="font-size:13px;color:#9E9E9E">0æµ ï¿½</span>
+        <span id="list-total-lbl" style="font-size:13px;font-weight:700;color:#1B5E20">éå £â: æ¥¼0</span>
       </div>
       <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden">
-        <table class="dtbl"><thead><tr><th>日付</th><th>金額</th><th>科目</th><th>使用場所</th><th>備考</th><th>ステータス</th><th style="text-align:center">操作</th></tr></thead>
+        <table class="dtbl"><thead><tr><th>éã¤ç²¯</th><th>é²æ¦î</th><th>ç»æ æ´°</th><th>æµ£è·¨æ¤é«å­å¢</th><th>éæ¬ï¿½ï¿½</th><th>éå¹¿åéç¬ºåªéï¿½</th><th style="text-align:center">é¿å¶ç¶</th></tr></thead>
         <tbody id="list-tbody"></tbody></table>
       </div>
       <div id="list-pagination" style="display:flex;justify-content:center;gap:6px;margin-top:14px"></div>
     </div><!-- /expenses -->
 
-    <!-- ══ FORM ══ -->
+    <!-- éºæ¨æ² FORM éºæ¨æ² -->
     <div id="page-form" class="page">
       <div style="max-width:640px;margin:0 auto">
         <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:28px">
           <h2 style="font-size:16px;font-weight:700;color:#212121;margin-bottom:20px;display:flex;align-items:center;gap:8px">
-            <i class="fa-solid fa-plus-circle" style="color:#2E7D32"></i> 経費申請
+            <i class="fa-solid fa-plus-circle" style="color:#2E7D32"></i> ç»²å²ä¸é¢å® ç
           </h2>
           <div style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px">
             <i class="fa-brands fa-line" style="color:#00B900;font-size:22px;margin-top:2px"></i>
             <div style="font-size:12.5px;color:#2E7D32">
-              <strong>LINE連携</strong>：公式LINEにレシートを送ると自動で申請フォームに反映されます。<br>
-              <span style="color:#66BB6A">LINE送信 → OCR解析 → 自動入力 → 確認・申請</span>
+              <strong>LINEé«ï½æ¡</strong>éæ°¬åå¯®å»INEéî å¸éæ«åéå å°é«ä½µå éã¨åéæä»¹é¢å® çéæåéç¬ºå¬éî¢å¼½éç®ä»éå±»ä¼¨éæ¬ï¿½ï¿½<br>
+              <span style="color:#66BB6A">LINEé«ä½·ä¿ é«ï¿½ OCRçï½ç½ é«ï¿½ é·îå«éã¥å§ é«ï¿½ çº°é¸¿çéè¤æµçï¿½</span>
             </div>
           </div>
           <div id="form-success" style="display:none;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:14px 16px;margin-bottom:18px;align-items:center;gap:10px">
             <i class="fa-solid fa-check-circle" style="color:#2E7D32;font-size:20px"></i>
-            <div><strong style="color:#1B5E20">申請を登録しました</strong><br>
-            <span style="font-size:12px;color:#388E3C">承認待ちとして保存されました。</span></div>
+            <div><strong style="color:#1B5E20">é¢å® çéææ«¥é·å±ä»éä¿±ä»éï¿½</strong><br>
+            <span style="font-size:12px;color:#388E3C">éµè¯çå¯°å«ä»­éã£ä»éï¸¿ç¹çæ¨¸ä»éå±»ä¼¨éæ¤¼ä»§éï¿½</span></div>
           </div>
           <form id="exp-form" onsubmit="submitForm(event)">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-              <div><label class="fl">金額（円）<span class="req">*</span></label>
-                <input type="number" id="fm-amount" class="fi" required min="1" max="9999999" placeholder="例：3,200"></div>
-              <div><label class="fl">経費発生日<span class="req">*</span></label>
+              <div><label class="fl">é²æ¦îéå åµéï¿½<span class="req">*</span></label>
+                <input type="number" id="fm-amount" class="fi" required min="1" max="9999999" placeholder="æ¸å¬¶ç´°3,200"></div>
+              <div><label class="fl">ç»²å²ä¸é§è¹æéï¿½<span class="req">*</span></label>
                 <input type="date" id="fm-date" class="fi" required></div>
-              <div style="grid-column:span 2"><label class="fl">経費科目<span class="req">*</span></label>
-                <select id="fm-cat" class="fi" required><option value="">選択してください</option></select></div>
-              <div style="grid-column:span 2"><label class="fl">使用場所・店舗名</label>
-                <input type="text" id="fm-loc" class="fi" placeholder="例：東京メトロ、スターバックス渋谷店"></div>
-              <div style="grid-column:span 2"><label class="fl">備考・目的</label>
-                <textarea id="fm-note" class="fi" rows="3" style="resize:none" placeholder="例：ABC商事とピ打ち合わせ"></textarea></div>
+              <div style="grid-column:span 2"><label class="fl">ç»²å²ä¸ç»æ æ´°<span class="req">*</span></label>
+                <select id="fm-cat" class="fi" required><option value="">é¬åå§éæ¤¼ä»¸éå¿ä»©éæäº</option></select></div>
+              <div style="grid-column:span 2"><label class="fl">æµ£è·¨æ¤é«å­å¢éè¯²ç°µé¸æ¥æ</label>
+                <input type="text" id="fm-loc" class="fi" placeholder="æ¸å¬¶ç´°éåå«éÂ°åéîï¿½ä½µå£éè£¤åéæ©åéîå£å¨å¬­èºæ´ï¿½"></div>
+              <div style="grid-column:span 2"><label class="fl">éæ¬ï¿½å¦åé©î¾æ®</label>
+                <textarea id="fm-note" class="fi" rows="3" style="resize:none" placeholder="æ¸å¬¶ç´°ABCéåç°¨éã£åéµæ±ä»­éå å§éï¿½"></textarea></div>
             </div>
             <div style="display:flex;gap:10px;margin-top:20px">
               <button type="submit" class="btn bp" style="flex:1;justify-content:center">
-                <i class="fa-solid fa-paper-plane"></i> 申請する</button>
-              <button type="button" onclick="resetForm()" class="btn bs">リセット</button>
+                <i class="fa-solid fa-paper-plane"></i> é¢å® çéæ¬å </button>
+              <button type="button" onclick="resetForm()" class="btn bs">éîå¦éå¦å</button>
             </div>
           </form>
         </div>
       </div>
     </div><!-- /form -->
 
-    <!-- ══ APPROVAL ══ -->
+    <!-- éºæ¨æ² APPROVAL éºæ¨æ² -->
     <div id="page-approval" class="page">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div>
-          <h2 style="font-size:16px;font-weight:700;color:#212121;margin:0">承認管理</h2>
+          <h2 style="font-size:16px;font-weight:700;color:#212121;margin:0">éµè¯çç» ï¼æ</h2>
           <p id="ap-subtitle" style="font-size:12px;color:#9E9E9E;margin:4px 0 0">-</p>
         </div>
         <div style="display:flex;gap:6px">
-          <button id="af-p" onclick="setApFilter('pending')" class="btn bp bsm">承認待ち</button>
-          <button id="af-a" onclick="setApFilter('all')"     class="btn bs bsm">すべて</button>
+          <button id="af-p" onclick="setApFilter('pending')" class="btn bp bsm">éµè¯çå¯°å«ä»­</button>
+          <button id="af-a" onclick="setApFilter('all')"     class="btn bs bsm">éæ¬ä¼éï¿½</button>
         </div>
       </div>
       <div id="approval-list"></div>
     </div><!-- /approval -->
 
-    <!-- ══ ANALYTICS ══ -->
+    <!-- éºæ¨æ² ANALYTICS éºæ¨æ² -->
     <div id="page-analytics" class="page">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
         <div style="background:white;border-radius:10px;padding:4px;display:flex;box-shadow:0 2px 8px rgba(0,0,0,.07)">
-          <button id="anl-m" onclick="setAnlMode('month')" style="padding:7px 18px;border:none;border-radius:8px;background:#2E7D32;color:white;font-size:13px;font-weight:600;cursor:pointer">月次</button>
-          <button id="anl-y" onclick="setAnnMode('year')"  style="padding:7px 18px;border:none;border-radius:8px;background:none;color:#9E9E9E;font-size:13px;font-weight:600;cursor:pointer">年次</button>
+          <button id="anl-m" onclick="setAnlMode('month')" style="padding:7px 18px;border:none;border-radius:8px;background:#2E7D32;color:white;font-size:13px;font-weight:600;cursor:pointer">éå î¼</button>
+          <button id="anl-y" onclick="setAnnMode('year')"  style="padding:7px 18px;border:none;border-radius:8px;background:none;color:#9E9E9E;font-size:13px;font-weight:600;cursor:pointer">éªå­î¼</button>
         </div>
         <select id="anl-period" onchange="renderAnalytics()" class="fi" style="width:auto;font-size:13px">
-          <option value="2026-02">2026年2月</option>
-          <option value="2026-01">2026年1月</option>
-          <option value="2025-12">2025年12月</option>
-          <option value="2025-11">2025年11月</option>
+          <option value="2026-02">2026éªï¿½2éï¿½</option>
+          <option value="2026-01">2026éªï¿½1éï¿½</option>
+          <option value="2025-12">2025éªï¿½12éï¿½</option>
+          <option value="2025-11">2025éªï¿½11éï¿½</option>
         </select>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
         <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
-          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">科目別内訳</h3>
+          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">ç»æ æ´°éã¥å´ç·ï¿½</h3>
           <div style="height:210px;position:relative"><canvas id="pie-chart"></canvas></div>
         </div>
         <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
-          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">月別経費推移（2026年）</h3>
+          <h3 style="font-size:13px;font-weight:700;color:#333;margin-bottom:14px">éå å¾ç»²å²ä¸éºã§Ð©éï¿½2026éªè¾¾ç´</h3>
           <div style="height:210px;position:relative"><canvas id="bar-chart"></canvas></div>
         </div>
       </div>
       <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
         <div style="padding:16px 20px;border-bottom:1px solid #EEE;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-weight:700;font-size:14px;color:#333">科目別集計</span>
-          <span id="anl-total" style="font-size:13px;color:#2E7D32;font-weight:700">合計: ¥0</span>
+          <span style="font-weight:700;font-size:14px;color:#333">ç»æ æ´°éã©æ³¦ç·ï¿½</span>
+          <span id="anl-total" style="font-size:13px;color:#2E7D32;font-weight:700">éå £â: æ¥¼0</span>
         </div>
-        <table class="dtbl"><thead><tr><th>科目</th><th style="text-align:center">件数</th><th>合計金額</th><th>平均金額</th><th style="min-width:120px">割合</th></tr></thead>
+        <table class="dtbl"><thead><tr><th>ç»æ æ´°</th><th style="text-align:center">æµ èµæ</th><th>éå £âé²æ¦î</th><th>éªå²æ½é²æ¦î</th><th style="min-width:120px">éææ</th></tr></thead>
         <tbody id="anl-tbody"></tbody></table>
       </div>
     </div><!-- /analytics -->
 
-    <!-- ══ EXPORT ══ -->
+    <!-- éºæ¨æ² EXPORT éºæ¨æ² -->
     <div id="page-export" class="page">
       <div style="display:grid;grid-template-columns:260px 1fr;gap:16px">
         <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:20px">
-          <h3 style="font-size:14px;font-weight:700;color:#333;margin-bottom:16px">出力設定</h3>
+          <h3 style="font-size:14px;font-weight:700;color:#333;margin-bottom:16px">éåå§ç·îç¾</h3>
           <div style="display:flex;flex-direction:column;gap:12px">
-            <div><label class="fl">開始日</label><input type="date" id="ex-s" class="fi" style="font-size:12px" onchange="renderExport()"></div>
-            <div><label class="fl">終了日</label><input type="date" id="ex-e" class="fi" style="font-size:12px" onchange="renderExport()"></div>
-            <div><label class="fl">経費科目</label>
-              <select id="ex-cat" class="fi" style="font-size:12px" onchange="renderExport()"><option value="">すべての科目</option></select></div>
-            <div><label class="fl">ステータス</label>
+            <div><label class="fl">éå¬ªîéï¿½</label><input type="date" id="ex-s" class="fi" style="font-size:12px" onchange="renderExport()"></div>
+            <div><label class="fl">ç»²åç°¡éï¿½</label><input type="date" id="ex-e" class="fi" style="font-size:12px" onchange="renderExport()"></div>
+            <div><label class="fl">ç»²å²ä¸ç»æ æ´°</label>
+              <select id="ex-cat" class="fi" style="font-size:12px" onchange="renderExport()"><option value="">éæ¬ä¼éï¸ºä¼ç»æ æ´°</option></select></div>
+            <div><label class="fl">éå¹¿åéç¬ºåªéï¿½</label>
               <select id="ex-st" class="fi" style="font-size:12px" onchange="renderExport()">
-                <option value="">すべて</option><option value="approved">承認済みのみ</option><option value="pending">承認待ちのみ</option>
+                <option value="">éæ¬ä¼éï¿½</option><option value="approved">éµè¯çå¨å ä¼©éîºä¼©</option><option value="pending">éµè¯çå¯°å«ä»­éîºä¼©</option>
               </select></div>
             <hr style="border:none;border-top:1px solid #EEE">
             <button onclick="doCSVExport()" class="btn bp" style="justify-content:center;width:100%">
-              <i class="fa-solid fa-file-csv"></i> CSVダウンロード</button>
+              <i class="fa-solid fa-file-csv"></i> CSVéï¿½éï¸ºåéîåéï¿½</button>
             <button onclick="window.print()" class="btn bs" style="justify-content:center;width:100%">
-              <i class="fa-solid fa-print"></i> 印刷・PDFに保存</button>
+              <i class="fa-solid fa-print"></i> éæ¿åéç±DFéî¡ç¹çï¿½</button>
           </div>
         </div>
         <div style="background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
           <div style="padding:16px 20px;border-bottom:1px solid #EEE;display:flex;justify-content:space-between;align-items:center">
-            <span style="font-weight:700;font-size:14px;color:#333">出力プレビワー</span>
-            <span id="ex-total" style="font-size:13px;font-weight:700;color:#1B5E20">合計: ¥0</span>
+            <span style="font-weight:700;font-size:14px;color:#333">éåå§éæ¤¼å¸éæ±å»éï¿½</span>
+            <span id="ex-total" style="font-size:13px;font-weight:700;color:#1B5E20">éå £â: æ¥¼0</span>
           </div>
           <div style="overflow-x:auto">
-            <table class="dtbl"><thead><tr><th>日付</th><th>申請者</th><th>金額</th><th>科目</th><th>使用場所</th><th>ステータス</th></tr></thead>
+            <table class="dtbl"><thead><tr><th>éã¤ç²¯</th><th>é¢å® çé°ï¿½</th><th>é²æ¦î</th><th>ç»æ æ´°</th><th>æµ£è·¨æ¤é«å­å¢</th><th>éå¹¿åéç¬ºåªéï¿½</th></tr></thead>
             <tbody id="ex-tbody"></tbody></table>
           </div>
         </div>
@@ -442,7 +442,7 @@ body { background:#F4F6F8; margin:0; }
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal-box" onclick="event.stopPropagation()">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <h3 style="font-size:16px;font-weight:700;color:#212121;margin:0">経費詳細</h3>
+      <h3 style="font-size:16px;font-weight:700;color:#212121;margin:0">ç»²å²ä¸ç­å´çª</h3>
       <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:#9E9E9E;font-size:20px"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div id="modal-body"></div>
@@ -453,10 +453,10 @@ body { background:#F4F6F8; margin:0; }
 <div id="toast"><i class="fa-solid fa-check-circle"></i><span id="toast-msg"></span></div>
 
 <script>
-// ════════════════════════════════════════
-// API クライアント
-// ════════════════════════════════════════
-const API = '';   // 同一サーバーなので相対URL
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// API éîåµéãåéç½å
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+const API = '';   // éå±¼ç«´éç¹åéæ©åéîä¼éÑæµçµç¶°RL
 
 async function apiFetch(path, opts = {}) {
   const token = localStorage.getItem('exflow_token');
@@ -468,16 +468,16 @@ async function apiFetch(path, opts = {}) {
   const res = await fetch(`${API}${path}`, { ...opts, headers });
   if (res.status === 401) { doLogout(); throw new Error('Unauthorized'); }
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'エラーが発生しました' }));
-    throw new Error(err.detail || 'エラーが発生しました');
+    const err = await res.json().catch(() => ({ detail: 'éã£åµéç¬ºäº´é§è¹æéæ¤¼ä¼¨éæ¤¼ä»§' }));
+    throw new Error(err.detail || 'éã£åµéç¬ºäº´é§è¹æéæ¤¼ä¼¨éæ¤¼ä»§');
   }
   return res;
 }
 async function apiJSON(path, opts = {}) { return (await apiFetch(path, opts)).json(); }
 
-// ════════════════════════════════════════
-// 状態管理
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éèµå ç» ï¼æ
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 let CU = null;   // current user
 let CATS = [];   // categories cache
 let allExpenses = [];  // list page cache
@@ -492,14 +492,14 @@ const PG     = 15;
 let dashChartObj = null, pieChartObj = null, barChartObj = null;
 const GCOLS = ['#1B5E20','#2E7D32','#388E3C','#43A047','#4CAF50','#66BB6A','#81C784','#A5D6A7','#C8E6C9','#F1F8E9'];
 
-// ════════════════════════════════════════
-// ユーティリティ
-// ════════════════════════════════════════
-const fmt  = n => '¥' + (n||0).toLocaleString();
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éï¸ºåéååéîåéï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+const fmt  = n => 'æ¥¼' + (n||0).toLocaleString();
 const fmtD = s => { if(!s) return '-'; const d=new Date(s+'T00:00:00'); return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; };
-const badge = s => s==='approved'?'<span class="badge b-approved">承認済み</span>':
-                   s==='pending' ?'<span class="badge b-pending">承認待ち</span>':
-                                  '<span class="badge b-rejected">否認</span>';
+const badge = s => s==='approved'?'<span class="badge b-approved">éµè¯çå¨å ä¼©</span>':
+                   s==='pending' ?'<span class="badge b-pending">éµè¯çå¯°å«ä»­</span>':
+                                  '<span class="badge b-rejected">éï¹ç</span>';
 const catName = id => (CATS.find(c=>c.id===id)||{name:'-'}).name;
 
 function showToast(msg, isErr=false) {
@@ -517,9 +517,9 @@ function closeModal(ev) {
     document.getElementById('modal-overlay').classList.remove('open');
 }
 
-// ════════════════════════════════════════
-// ログイン / ログアウト
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éîåéãå / éîåéâ¬åéï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function doLogin(ev) {
   ev.preventDefault();
   const email = document.getElementById('login-email').value;
@@ -545,35 +545,35 @@ function doLogout() {
   document.getElementById('login-screen').classList.add('show');
 }
 
-// ════════════════════════════════════════
-// 初期化
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éæ¿æ¹¡éï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function initApp() {
   document.getElementById('login-screen').classList.remove('show');
 
-  // ユーザー情報を表示
+  // éï¸ºåéèº²åé¯å­ç¨éæãç»ï¿½
   document.getElementById('uname').textContent       = CU.name;
   document.getElementById('udept').textContent       = CU.department;
   document.getElementById('uavatar').textContent     = CU.name[0];
   document.getElementById('header-uname').textContent= CU.name;
-  document.getElementById('header-role').textContent = CU.role === 'admin' ? '社長' : '社員';
+  document.getElementById('header-role').textContent = CU.role === 'admin' ? 'ç»é¹æ¦' : 'ç»æ§æ';
   document.getElementById('today-label').textContent = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
 
-  // 承認管理メニューの表示
+  // éµè¯çç» ï¼æéÂ°åéã£åéî¿ãç»ï¿½
   document.getElementById('nav-approval').style.display = CU.role === 'admin' ? 'flex' : 'none';
 
-  // 科目マスタ取得（キャッシュ）
+  // ç»æ æ´°éçªå£éå®å½å¯°æ¥ç´éîå¯éå¦å¡éã¯ç´
   CATS = await apiJSON('/api/categories');
   const catOpts = CATS.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-  document.getElementById('fm-cat').innerHTML  = '<option value="">選択してください</option>' + catOpts;
-  document.getElementById('fl-cat').innerHTML  = '<option value="">すべて</option>' + catOpts;
-  document.getElementById('ex-cat').innerHTML  = '<option value="">すべての科目</option>' + catOpts;
+  document.getElementById('fm-cat').innerHTML  = '<option value="">é¬åå§éæ¤¼ä»¸éå¿ä»©éæäº</option>' + catOpts;
+  document.getElementById('fl-cat').innerHTML  = '<option value="">éæ¬ä¼éï¿½</option>' + catOpts;
+  document.getElementById('ex-cat').innerHTML  = '<option value="">éæ¬ä¼éï¸ºä¼ç»æ æ´°</option>' + catOpts;
 
-  // 今日の日付をデフォルト設定
+  // æµ å©æ£©éî½æ£©æµ æ¨¸å°éå¥å éâ¿å·éå £Åç¹ï¿½
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('fm-date').value = today;
 
-  // ダッシュボード表示
+  // éï¿½éå¦å¡éã£å¨éç¬ºåçã§ã
   showPage('dashboard');
 }
 
@@ -586,16 +586,16 @@ async function checkAuth() {
   } catch { localStorage.removeItem('exflow_token'); }
 }
 
-// ════════════════════════════════════════
-// ナビゲーション
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éå¨¿åéå±åéæ«å³éï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 function showPage(p) {
   document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('page-' + p).classList.add('active');
   document.querySelector(`[data-page="${p}"]`).classList.add('active');
-  const titles = { dashboard:'ダッシュボード', expenses:'経費一覧', form:'経費申請',
-                   approval:'承認管理', analytics:'分析レポート', export:'出力・印刷' };
+  const titles = { dashboard:'éï¿½éå¦å¡éã£å¨éç¬ºå', expenses:'ç»²å²ä¸æ¶ï¿½çï¿½', form:'ç»²å²ä¸é¢å® ç',
+                   approval:'éµè¯çç» ï¼æ', analytics:'éåç½éî¾å©éç¬ºå', export:'éåå§éè¯²åµéï¿½' };
   document.getElementById('page-title').textContent = titles[p] || p;
   if (p === 'dashboard') renderDashboard();
   if (p === 'expenses')  { lPage=1; loadExpenses(); }
@@ -604,9 +604,9 @@ function showPage(p) {
   if (p === 'export')    renderExport();
 }
 
-// ════════════════════════════════════════
-// ダッシュボード
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éï¿½éå¦å¡éã£å¨éç¬ºå
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function renderDashboard() {
   const yr = dashDate.getFullYear(), mo = dashDate.getMonth() + 1;
   try {
@@ -615,12 +615,12 @@ async function renderDashboard() {
       apiJSON('/api/expenses?sort=date_desc')
     ]);
     document.getElementById('s-month-total').textContent = fmt(summary.monthly_total);
-    document.getElementById('s-month-count').textContent = summary.monthly_count + '件';
-    document.getElementById('s-pending').textContent     = summary.pending_count  + '件';
-    document.getElementById('s-month-label').textContent = `${yr}年${mo}月`;
+    document.getElementById('s-month-count').textContent = summary.monthly_count + 'æµ ï¿½';
+    document.getElementById('s-pending').textContent     = summary.pending_count  + 'æµ ï¿½';
+    document.getElementById('s-month-label').textContent = `${yr}éªï¿½${mo}éå;
     document.getElementById('pending-badge').textContent = summary.pending_count;
 
-    // 直近5件
+    // é©ç£ç¹5æµ ï¿½
     const tbody = document.getElementById('recent-tbody');
     const top5  = recent.slice(0, 5);
     tbody.innerHTML = top5.length ? top5.map(e => `
@@ -630,20 +630,20 @@ async function renderDashboard() {
         <td>${e.category.name}</td>
         <td style="color:#9E9E9E;font-size:12px">${e.location||'-'}</td>
         <td>${badge(e.status)}</td>
-      </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#9E9E9E;padding:24px">データがありません</td></tr>';
+      </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#9E9E9E;padding:24px">éå¥åéè£¤äº´éååéä¿±ä»éï¿½</td></tr>';
 
     await renderDashChart(yr, mo);
   } catch(e) { showToast(e.message, true); }
 }
 
 async function renderDashChart(yr, mo) {
-  document.getElementById('dash-period-total').textContent = '¥0';
-  document.getElementById('dash-period-count').textContent = '（0件）';
+  document.getElementById('dash-period-total').textContent = 'æ¥¼0';
+  document.getElementById('dash-period-count').textContent = 'éï¿½0æµ è®¹ç´';
   let labels = [], data = [], total = 0, count = 0, isDoughnut = false;
 
   try {
     if (dashTab === 'monthly') {
-      document.getElementById('dash-period-label').textContent = `${yr}年${mo}月`;
+      document.getElementById('dash-period-label').textContent = `${yr}éªï¿½${mo}éå;
       const days = await apiJSON(`/api/analytics/daily?year=${yr}&month=${mo}`);
       labels = days.map(d => d.label);
       data   = days.map(d => d.total);
@@ -651,7 +651,7 @@ async function renderDashChart(yr, mo) {
       count  = days.reduce((a, d) => a + d.count, 0);
     } else if (dashTab === 'daily') {
       const d = dashDate;
-      document.getElementById('dash-period-label').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+      document.getElementById('dash-period-label').textContent = `${d.getFullYear()}éªï¿½${d.getMonth()+1}éï¿½${d.getDate()}éî¦;
       const ds    = d.toISOString().split('T')[0];
       const items = await apiJSON(`/api/expenses?date_from=${ds}&date_to=${ds}`);
       const bycat = {};
@@ -661,9 +661,9 @@ async function renderDashChart(yr, mo) {
       isDoughnut = true;
       total      = data.reduce((a, v) => a + v, 0);
       count      = items.length;
-      if (!labels.length) { labels=['データなし']; data=[0]; }
+      if (!labels.length) { labels=['éå¥åéè£¤ä»¾éï¿½']; data=[0]; }
     } else {
-      document.getElementById('dash-period-label').textContent = `${yr}�t`;
+      document.getElementById('dash-period-label').textContent = `${yr}èt`;
       const months = await apiJSON(`/api/analytics/monthly?year=${yr}`);
       labels = months.map(m => m.label);
       data   = months.map(m => m.total);
@@ -672,20 +672,20 @@ async function renderDashChart(yr, mo) {
     }
 
     document.getElementById('dash-period-total').textContent = fmt(total);
-    document.getElementById('dash-period-count').textContent = `（${count}件）`;
+    document.getElementById('dash-period-count').textContent = `éï¿½${count}æµ è®¹ç´`;
 
     const ctx = document.getElementById('dash-chart').getContext('2d');
     if (dashChartObj) dashChartObj.destroy();
     dashChartObj = new Chart(ctx, {
       type: isDoughnut ? 'doughnut' : 'bar',
-      data: { labels, datasets:[{ label:'金額（円）', data,
+      data: { labels, datasets:[{ label:'é²æ¦îéå åµéï¿½', data,
         backgroundColor: isDoughnut ? GCOLS : 'rgba(46,125,50,.75)',
         borderColor: isDoughnut ? 'white' : '#2E7D32',
         borderWidth: isDoughnut ? 2 : 1, borderRadius: isDoughnut ? 0 : 4 }] },
       options: { responsive:true, maintainAspectRatio:false,
         plugins:{ legend:{ display:isDoughnut, position:'right', labels:{font:{size:11},boxWidth:12} } },
         scales: isDoughnut ? {} : {
-          y:{ beginAtZero:true, grid:{color:'#F5F5F5'}, ticks:{callback:v=>v>=1000?'¥'+(v/1000)+'k':'¥'+v,font:{size:10}} },
+          y:{ beginAtZero:true, grid:{color:'#F5F5F5'}, ticks:{callback:v=>v>=1000?'æ¥¼'+(v/1000)+'k':'æ¥¼'+v,font:{size:10}} },
           x:{ grid:{display:false}, ticks:{font:{size:9},maxRotation:45} } } }
     });
   } catch(e) { showToast(e.message, true); }
@@ -710,9 +710,9 @@ function dashNext() {
   renderDashChart(dashDate.getFullYear(), dashDate.getMonth()+1);
 }
 
-// ════════════════════════════════════════
-// 経費一覧
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// ç»²å²ä¸æ¶ï¿½çï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 function toggleFilter() { document.getElementById('filter-panel').classList.toggle('open'); }
 function resetFilter() {
   ['fl-s','fl-e','fl-st','fl-cat','fl-min','fl-max'].forEach(id => document.getElementById(id).value = '');
@@ -720,7 +720,7 @@ function resetFilter() {
 }
 
 async function loadExpenses() {
-  document.getElementById('list-tbody').innerHTML = '<tr><td colspan="7"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div></td></tr>';
+  document.getElementById('list-tbody').innerHTML = '<tr><td colspan="7"><div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>ç¾îä¼©æç¬ºä¼©æ¶ï¿½...</div></td></tr>';
   try {
     const params = new URLSearchParams();
     const s = document.getElementById('fl-s').value,  e = document.getElementById('fl-e').value;
@@ -739,8 +739,8 @@ async function loadExpenses() {
     if(mx) allExpenses = allExpenses.filter(x => x.amount <= parseInt(mx));
 
     const total = allExpenses.reduce((a, x) => a + x.amount, 0);
-    document.getElementById('list-info').textContent      = `${allExpenses.length}件`;
-    document.getElementById('list-total-lbl').textContent = `合計: ${fmt(total)}`;
+    document.getElementById('list-info').textContent      = `${allExpenses.length}æµ ç¦¶;
+    document.getElementById('list-total-lbl').textContent = `éå £â: ${fmt(total)}`;
     renderListPage();
   } catch(e) { showToast(e.message, true); }
 }
@@ -749,7 +749,7 @@ function renderListPage() {
   const paged = allExpenses.slice((lPage-1)*PG, lPage*PG);
   const tbody = document.getElementById('list-tbody');
   if (!allExpenses.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9E9E9E;padding:48px"><i class="fa-solid fa-inbox" style="font-size:32px;display:block;margin-bottom:10px"></i>条件に一致する経費がありません</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9E9E9E;padding:48px"><i class="fa-solid fa-inbox" style="font-size:32px;display:block;margin-bottom:10px"></i>éâ²æ¬¢éî¡ç«´é·æ·¬ä»éå¬¬ç¥µç¨æ±äº´éååéä¿±ä»éï¿½</td></tr>';
   } else {
     tbody.innerHTML = paged.map(e => `
       <tr>
@@ -760,7 +760,7 @@ function renderListPage() {
         <td onclick="showDetail(${e.id})" style="color:#BDBDBD;font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.note||'-'}</td>
         <td onclick="showDetail(${e.id})">${badge(e.status)}</td>
         <td style="text-align:center">
-          ${e.status==='pending'?`<button onclick="deleteExpense(${e.id})" style="background:none;border:none;color:#EF5350;cursor:pointer" title="削除"><i class="fa-solid fa-trash" style="font-size:13px"></i></button>`:'-'}
+          ${e.status==='pending'?`<button onclick="deleteExpense(${e.id})" style="background:none;border:none;color:#EF5350;cursor:pointer" title="éå©æ«"><i class="fa-solid fa-trash" style="font-size:13px"></i></button>`:'-'}
         </td>
       </tr>`).join('');
   }
@@ -773,16 +773,16 @@ function renderListPage() {
 function goPage(n) { lPage = n; renderListPage(); }
 
 async function deleteExpense(id) {
-  if (!confirm('この経費を削除しますか？')) return;
+  if (!confirm('éæ±ä¼ç»²å²ä¸éæå¢éãä»éä¿±ä»éå¬¶ç´µ')) return;
   try {
     await apiFetch(`/api/expenses/${id}`, { method: 'DELETE' });
-    showToast('削除しました'); loadExpenses();
+    showToast('éå©æ«éæ¤¼ä¼¨éæ¤¼ä»§'); loadExpenses();
   } catch(e) { showToast(e.message, true); }
 }
 
-// ════════════════════════════════════════
-// 経費申請フォーム
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// ç»²å²ä¸é¢å® çéæåéç¬ºå¬
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function submitForm(ev) {
   ev.preventDefault();
   try {
@@ -800,8 +800,8 @@ async function submitForm(ev) {
     document.getElementById('fm-date').value = new Date().toISOString().split('T')[0];
     const s = document.getElementById('form-success');
     s.style.display = 'flex'; setTimeout(() => s.style.display = 'none', 4000);
-    showToast('申請を登録しました！');
-    // 承認待ちバッジ更新
+    showToast('é¢å® çéææ«¥é·å±ä»éä¿±ä»éçç´');
+    // éµè¯çå¯°å«ä»­éæ©åéåæ´¿éï¿½
     const sum = await apiJSON(`/api/analytics/summary?year=2026&month=2`);
     document.getElementById('pending-badge').textContent = sum.pending_count;
   } catch(e) { showToast(e.message, true); }
@@ -812,9 +812,9 @@ function resetForm() {
   document.getElementById('form-success').style.display = 'none';
 }
 
-// ════════════════════════════════════════
-// 承認管理
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éµè¯çç» ï¼æ
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 function setApFilter(f) {
   apFilter = f;
   document.getElementById('af-p').className = 'btn bsm ' + (f==='pending'?'bp':'bs');
@@ -823,14 +823,14 @@ function setApFilter(f) {
 }
 
 async function loadApproval() {
-  document.getElementById('approval-list').innerHTML = '<div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>読み込み中...</div>';
+  document.getElementById('approval-list').innerHTML = '<div class="spinner"><i class="fa-solid fa-spinner fa-spin"></i>ç¾îä¼©æç¬ºä¼©æ¶ï¿½...</div>';
   try {
     const params = apFilter === 'pending' ? '?status=pending' : '';
     const list = await apiJSON('/api/expenses' + params);
-    document.getElementById('ap-subtitle').textContent = apFilter==='pending' ? `承認待ち ${list.length}件` : `全 ${list.length}件`;
+    document.getElementById('ap-subtitle').textContent = apFilter==='pending' ? `éµè¯çå¯°å«ä»­ ${list.length}æµ ç¦¶ : `éï¿½ ${list.length}æµ ç¦¶;
     const c = document.getElementById('approval-list');
     if (!list.length) {
-      c.innerHTML = '<div style="background:white;border-radius:14px;padding:60px;text-align:center;color:#BDBDBD;box-shadow:0 2px 10px rgba(0,0,0,.07)"><i class="fa-solid fa-check-circle" style="font-size:40px;color:#A5D6A7;display:block;margin-bottom:12px"></i>承認待ちの申請はありません</div>';
+      c.innerHTML = '<div style="background:white;border-radius:14px;padding:60px;text-align:center;color:#BDBDBD;box-shadow:0 2px 10px rgba(0,0,0,.07)"><i class="fa-solid fa-check-circle" style="font-size:40px;color:#A5D6A7;display:block;margin-bottom:12px"></i>éµè¯çå¯°å«ä»­éî¾æµçå¬¨ä¼éååéä¿±ä»éï¿½</div>';
       return;
     }
     c.innerHTML = list.map(e => `
@@ -840,7 +840,7 @@ async function loadApproval() {
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
               ${badge(e.status)}
               <span style="font-size:12px;color:#9E9E9E">${fmtD(e.expense_date)}</span>
-              <span style="font-size:12px;color:#BDBDBD">${e.user.name}（${e.user.department}）</span>
+              <span style="font-size:12px;color:#BDBDBD">${e.user.name}éï¿½${e.user.department}éï¿½</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span style="font-size:24px;font-weight:800;color:#1B5E20">${fmt(e.amount)}</span>
@@ -852,10 +852,10 @@ async function loadApproval() {
           <div style="margin-left:16px">
             ${e.status==='pending' ? `
             <div style="display:flex;gap:6px">
-              <button onclick="doApprove(${e.id})" class="btn bp bsm"><i class="fa-solid fa-check"></i> 承認</button>
-              <button onclick="doReject(${e.id})"  class="btn bd bsm"><i class="fa-solid fa-xmark"></i> 否認</button>
+              <button onclick="doApprove(${e.id})" class="btn bp bsm"><i class="fa-solid fa-check"></i> éµè¯ç</button>
+              <button onclick="doReject(${e.id})"  class="btn bd bsm"><i class="fa-solid fa-xmark"></i> éï¹ç</button>
             </div>` : `<div style="font-size:12px;color:#9E9E9E;text-align:right">
-              ${e.status==='approved'?'<i class="fa-solid fa-check" style="color:#2E7D32"></i> 承認済み':'<i class="fa-solid fa-xmark" style="color:#C62828"></i> 否認'}
+              ${e.status==='approved'?'<i class="fa-solid fa-check" style="color:#2E7D32"></i> éµè¯çå¨å ä¼©':'<i class="fa-solid fa-xmark" style="color:#C62828"></i> éï¹ç'}
               ${e.approved_at?`<br><span style="font-size:11px">${fmtD(e.approved_at)}</span>`:''}
             </div>`}
           </div>
@@ -865,17 +865,17 @@ async function loadApproval() {
 }
 
 async function doApprove(id) {
-  try { await apiJSON(`/api/expenses/${id}/approve`,{method:'POST'}); showToast('承認しました'); loadApproval(); }
+  try { await apiJSON(`/api/expenses/${id}/approve`,{method:'POST'}); showToast('éµè¯çéæ¤¼ä¼¨éæ¤¼ä»§'); loadApproval(); }
   catch(e) { showToast(e.message,true); }
 }
 async function doReject(id) {
-  try { await apiJSON(`/api/expenses/${id}/reject`,{method:'POST'}); showToast('否認しました'); loadApproval(); }
+  try { await apiJSON(`/api/expenses/${id}/reject`,{method:'POST'}); showToast('éï¹çéæ¤¼ä¼¨éæ¤¼ä»§'); loadApproval(); }
   catch(e) { showToast(e.message,true); }
 }
 
-// ════════════════════════════════════════
-// 分析レポート
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éåç½éî¾å©éç¬ºå
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 function setAnlMode(m) {
   anlMode = m;
   const aBtn = s => `padding:7px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:${s?'#2E7D32':'none'};color:${s?'white':'#9E9E9E'}`;
@@ -894,7 +894,7 @@ async function renderAnalytics() {
       apiJSON(`/api/analytics/monthly?year=${yr}`)
     ]);
     const total = catData.reduce((a,c) => a + c.total, 0);
-    document.getElementById('anl-total').textContent = `合計: ${fmt(total)}（${catData.reduce((a,c)=>a+c.count,0)}件）`;
+    document.getElementById('anl-total').textContent = `éå £â: ${fmt(total)}éï¿½${catData.reduce((a,c)=>a+c.count,0)}æµ è®¹ç´`;
 
     // Pie chart
     const pCtx = document.getElementById('pie-chart').getContext('2d');
@@ -910,16 +910,16 @@ async function renderAnalytics() {
     if (barChartObj) barChartObj.destroy();
     barChartObj = new Chart(bCtx, {
       type:'bar',
-      data:{ labels:monthData.map(m=>m.label), datasets:[{ label:'合計（円）', data:monthData.map(m=>m.total), backgroundColor:'rgba(46,125,50,.75)', borderColor:'#2E7D32', borderWidth:1, borderRadius:4 }] },
+      data:{ labels:monthData.map(m=>m.label), datasets:[{ label:'éå £âéå åµéï¿½', data:monthData.map(m=>m.total), backgroundColor:'rgba(46,125,50,.75)', borderColor:'#2E7D32', borderWidth:1, borderRadius:4 }] },
       options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-        scales:{ y:{beginAtZero:true,grid:{color:'#F5F5F5'},ticks:{callback:v=>v>=1000?'¥'+(v/1000)+'k':'¥'+v,font:{size:10}}}, x:{grid:{display:false},ticks:{font:{size:10}}} } }
+        scales:{ y:{beginAtZero:true,grid:{color:'#F5F5F5'},ticks:{callback:v=>v>=1000?'æ¥¼'+(v/1000)+'k':'æ¥¼'+v,font:{size:10}}}, x:{grid:{display:false},ticks:{font:{size:10}}} } }
     });
 
     // Summary table
     document.getElementById('anl-tbody').innerHTML = catData.map(c => `
       <tr>
         <td style="font-weight:600">${c.category_name}</td>
-        <td style="text-align:center">${c.count}件</td>
+        <td style="text-align:center">${c.count}æµ ï¿½</td>
         <td style="font-weight:700;color:#1B5E20">${fmt(c.total)}</td>
         <td>${fmt(c.avg)}</td>
         <td>
@@ -932,9 +932,9 @@ async function renderAnalytics() {
   } catch(e) { showToast(e.message, true); }
 }
 
-// ════════════════════════════════════════
-// 出力・印刷
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// éåå§éè¯²åµéï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function renderExport() {
   try {
     const params = new URLSearchParams();
@@ -944,7 +944,7 @@ async function renderExport() {
     if(ci) params.set('category_id',ci); if(st) params.set('status',st);
     const list = await apiJSON('/api/expenses?' + params.toString());
     const total = list.reduce((a,x)=>a+x.amount,0);
-    document.getElementById('ex-total').textContent = `合計: ${fmt(total)}（${list.length}件）`;
+    document.getElementById('ex-total').textContent = `éå £â: ${fmt(total)}éï¿½${list.length}æµ è®¹ç´`;
     document.getElementById('ex-tbody').innerHTML = list.map(e => `
       <tr>
         <td>${fmtD(e.expense_date)}</td>
@@ -969,15 +969,15 @@ async function doCSVExport() {
     const blob = await res.blob();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `経費一覧_${new Date().toISOString().slice(0,10)}.csv`;
+    a.download = `ç»²å²ä¸æ¶ï¿½çî¥${new Date().toISOString().slice(0,10)}.csv`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    showToast('CSW�2ダウンロードしました');
+    showToast('CSWé2éï¿½éï¸ºåéîåéå¤ä»éä¿±ä»éï¿½');
   } catch(e) { showToast(e.message, true); }
 }
 
-// ════════════════════════════════════════
-// 経費詳細モーダル
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// ç»²å²ä¸ç­å´çªéâ¬åéï¿½éï¿½
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 async function showDetail(id) {
   try {
     const e = await apiJSON(`/api/expenses/${id}`);
@@ -987,38 +987,50 @@ async function showDetail(id) {
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
         <div style="background:#F9FBF9;border-radius:10px;padding:14px">
-          <div style="font-size:11px;color:#9E9E9E">金額</div>
+          <div style="font-size:11px;color:#9E9E9E">é²æ¦î</div>
           <div style="font-size:24px;font-weight:800;color:#1B5E20;margin-top:4px">${fmt(e.amount)}</div>
         </div>
         <div style="background:#F9FBF9;border-radius:10px;padding:14px">
-          <div style="font-size:11px;color:#9E9E9E">発生日</div>
+          <div style="font-size:11px;color:#9E9E9E">é§è¹æéï¿½</div>
           <div style="font-size:15px;font-weight:700;color:#333;margin-top:4px">${fmtD(e.expense_date)}</div>
         </div>
         <div style="background:#F9FBF9;border-radius:10px;padding:14px">
-          <div style="font-size:11px;color:#9E9E9E">経費科目</div>
+          <div style="font-size:11px;color:#9E9E9E">ç»²å²ä¸ç»æ æ´°</div>
           <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px">${e.category.name}</div>
         </div>
         <div style="background:#F9FBF9;border-radius:10px;padding:14px">
-          <div style="font-size:11px;color:#9E9E9E">申請者</div>
+          <div style="font-size:11px;color:#9E9E9E">é¢å® çé°ï¿½</div>
           <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px">${e.user.name}
             <span style="font-size:11px;color:#9E9E9E;font-weight:400;margin-left:4px">${e.user.department}</span></div>
         </div>
       </div>
-      ${e.location?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">使用場所</span><div style="font-size:13px;margin-top:4px">${e.location}</div></div>`:''}
-      ${e.note?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">備考</span><div style="font-size:13px;margin-top:4px">${e.note}</div></div>`:''}
-      ${e.approved_at?`<div style="font-size:11px;color:#BDBDBD;text-align:right;margin-top:6px">承認: ${fmtD(e.approved_at)} / ${e.approver?.name||''}</div>`:''}
+      ${e.location?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">æµ£è·¨æ¤é«å­å¢</span><div style="font-size:13px;margin-top:4px">${e.location}</div></div>`:''}
+      ${e.note?`<div style="background:#F9FBF9;border-radius:10px;padding:12px;margin-bottom:8px"><span style="font-size:11px;color:#9E9E9E">éæ¬ï¿½ï¿½</span><div style="font-size:13px;margin-top:4px">${e.note}</div></div>`:''}
+      ${e.approved_at?`<div style="font-size:11px;color:#BDBDBD;text-align:right;margin-top:6px">éµè¯ç: ${fmtD(e.approved_at)} / ${e.approver?.name||''}</div>`:''}
       ${CU?.role==='admin'&&e.status==='pending'?`
       <div style="display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid #EEE">
-        <button onclick="doApprove(${e.id});closeModal()" class="btn bp" style="flex:1;justify-content:center"><i class="fa-solid fa-check"></i> 承認</button>
-        <button onclick="doReject(${e.id});closeModal()"  class="btn bd" style="flex:1;justify-content:center"><i class="fa-solid fa-xmark"></i> 否認</button>
+        <button onclick="doApprove(${e.id});closeModal()" class="btn bp" style="flex:1;justify-content:center"><i class="fa-solid fa-check"></i> éµè¯ç</button>
+        <button onclick="doReject(${e.id});closeModal()"  class="btn bd" style="flex:1;justify-content:center"><i class="fa-solid fa-xmark"></i> éï¹ç</button>
       </div>`:''}`);
   } catch(e) { showToast(e.message, true); }
 }
 
-// ════════════════════════════════════════
-// 起動
-// ════════════════════════════════════════
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
+// ç§å³°å«
+// éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²éºæ¨æ²
 document.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+
+<script>
+// ログイン不要モード
+checkAuth = () => true;
+doLogout = () => {};
+const _origInitApp = typeof initApp === 'function' ? initApp : null;
+document.addEventListener('DOMContentLoaded', function() {
+  // ログイン画面を隐す
+  const ls = document.getElementById('login-screen');
+  if (ls) ls.style.display = 'none';
+}, true); // capture phase - runs before other DOMContentLoaded
 </script>
 </body>
 </html>
