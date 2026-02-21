@@ -1,5 +1,5 @@
 """
-ExFlow - 経費管理システム バックエンド
+ExFlow - çµè²»ç®¡çã·ã¹ãã  ããã¯ã¨ã³ã
 FastAPI + SQLAlchemy + SQLite
 """
 from fastapi import FastAPI, Depends, HTTPException, Request
@@ -19,17 +19,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ════════════════════════════════════════
-# 設定
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# è¨­å®
+# ââââââââââââââââââââââââââââââââââââââââ
 SECRET_KEY        = os.getenv("SECRET_KEY", "expflow-secret-please-change-in-production")
 DATABASE_URL      = os.getenv("DATABASE_URL", "sqlite:///./expflow.db")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "")
 LINE_CHANNEL_TOKEN  = os.getenv("LINE_CHANNEL_TOKEN", "")
 
-# ════════════════════════════════════════
-# データベース
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# ãã¼ã¿ãã¼ã¹
+# ââââââââââââââââââââââââââââââââââââââââ
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
@@ -44,9 +44,9 @@ def get_db():
     finally:
         db.close()
 
-# ════════════════════════════════════════
-# モデル（データベーステーブル定義）
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# ã¢ãã«ï¼ãã¼ã¿ãã¼ã¹ãã¼ãã«å®ç¾©ï¼
+# ââââââââââââââââââââââââââââââââââââââââ
 class User(Base):
     __tablename__ = "users"
     id            = Column(Integer, primary_key=True, index=True)
@@ -84,9 +84,9 @@ class Expense(Base):
     created_at   = Column(DateTime, default=datetime.utcnow)
     updated_at   = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-# ════════════════════════════════════════
-# 認証ユーティリティ
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# èªè¨¼ã¦ã¼ãã£ãªãã£
+# ââââââââââââââââââââââââââââââââââââââââ
 pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer  = HTTPBearer()
 
@@ -108,20 +108,20 @@ def get_current_user(
         payload = jwt.decode(creds.credentials, SECRET_KEY, algorithms=["HS256"])
         user_id = int(payload.get("sub", 0))
     except (JWTError, ValueError):
-        raise HTTPException(status_code=401, detail="認証トークンが無効です")
+        raise HTTPException(status_code=401, detail="èªè¨¼ãã¼ã¯ã³ãç¡å¹ã§ã")
     user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
     if not user:
-        raise HTTPException(status_code=401, detail="ユーザーが見つかりません")
+        raise HTTPException(status_code=401, detail="ã¦ã¼ã¶ã¼ãè¦ã¤ããã¾ãã")
     return user
 
 def require_admin(user: User = Depends(get_current_user)) -> User:
     if user.role != "admin":
-        raise HTTPException(status_code=403, detail="管理者権限が必要です")
+        raise HTTPException(status_code=403, detail="ç®¡çèæ¨©éãå¿è¦ã§ã")
     return user
 
-# ════════════════════════════════════════
-# リクエスト/レスポンス スキーマ
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# ãªã¯ã¨ã¹ã/ã¬ã¹ãã³ã¹ ã¹ã­ã¼ã
+# ââââââââââââââââââââââââââââââââââââââââ
 class LoginRequest(BaseModel):
     email:    str
     password: str
@@ -140,9 +140,9 @@ class ExpenseUpdate(BaseModel):
     expense_date: Optional[date] = None
     note:         Optional[str]  = None
 
-# ════════════════════════════════════════
-# ヘルパー
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# ãã«ãã¼
+# ââââââââââââââââââââââââââââââââââââââââ
 def expense_to_dict(e: Expense, db: Session) -> dict:
     user  = db.query(User).filter(User.id == e.user_id).first()
     cat   = db.query(Category).filter(Category.id == e.category_id).first()
@@ -162,12 +162,12 @@ def expense_to_dict(e: Expense, db: Session) -> dict:
         "approver": {"id": appr.id,  "name": appr.name}                                  if appr else None,
     }
 
-# ════════════════════════════════════════
-# FastAPI アプリケーション
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# FastAPI ã¢ããªã±ã¼ã·ã§ã³
+# ââââââââââââââââââââââââââââââââââââââââ
 app = FastAPI(
     title="ExFlow API",
-    description="経費管理システム REST API",
+    description="çµè²»ç®¡çã·ã¹ãã  REST API",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc"
@@ -181,15 +181,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ────────────────────────────────────────
-# 認証エンドポイント
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# èªè¨¼ã¨ã³ããã¤ã³ã
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.post("/api/auth/login")
 def login(req: LoginRequest, db: Session = Depends(get_db)):
-    """ログイン → JWTトークンを返す"""
+    """ã­ã°ã¤ã³ â JWTãã¼ã¯ã³ãè¿ã"""
     user = db.query(User).filter(User.email == req.email, User.is_active == True).first()
     if not user or not verify_password(req.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="メールアドレスまたはパスワードが間違っています")
+        raise HTTPException(status_code=401, detail="ã¡ã¼ã«ã¢ãã¬ã¹ã¾ãã¯ãã¹ã¯ã¼ããééã£ã¦ãã¾ã")
     return {
         "access_token": create_token(user.id),
         "token_type":   "bearer",
@@ -199,9 +199,9 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
         }
     }
 
-# ────────────────────────────────────────
-# ユーザー
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# ã¦ã¼ã¶ã¼
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.get("/api/users/me")
 def get_me(current: User = Depends(get_current_user)):
     return {"id": current.id, "name": current.name, "email": current.email,
@@ -212,17 +212,17 @@ def list_users(db: Session = Depends(get_db), _: User = Depends(require_admin)):
     return [{"id": u.id, "name": u.name, "department": u.department, "role": u.role}
             for u in db.query(User).filter(User.is_active == True).all()]
 
-# ────────────────────────────────────────
-# 経費科目
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# çµè²»ç§ç®
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.get("/api/categories")
 def list_categories(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     return [{"id": c.id, "code": c.code, "name": c.name}
             for c in db.query(Category).filter(Category.is_active == True).order_by(Category.sort_order).all()]
 
-# ────────────────────────────────────────
-# 経費 CRUD
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# çµè²» CRUD
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.get("/api/expenses")
 def list_expenses(
     date_from:   Optional[str] = None,
@@ -235,7 +235,7 @@ def list_expenses(
     current:     User    = Depends(get_current_user)
 ):
     q = db.query(Expense)
-    # 権限フィルター（社員は自分の経費のみ）
+    # æ¨©éãã£ã«ã¿ã¼ï¼ç¤¾å¡ã¯èªåã®çµè²»ã®ã¿ï¼
     if current.role != "admin":
         q = q.filter(Expense.user_id == current.id)
     elif user_id:
@@ -272,9 +272,9 @@ def create_expense(
 @app.get("/api/expenses/{expense_id}")
 def get_expense(expense_id: int, db: Session = Depends(get_db), current: User = Depends(get_current_user)):
     e = db.query(Expense).filter(Expense.id == expense_id).first()
-    if not e: raise HTTPException(404, "経費が見つかりません")
+    if not e: raise HTTPException(404, "çµè²»ãè¦ã¤ããã¾ãã")
     if current.role != "admin" and e.user_id != current.id:
-        raise HTTPException(403, "アクセス権限がありません")
+        raise HTTPException(403, "ã¢ã¯ã»ã¹æ¨©éãããã¾ãã")
     return expense_to_dict(e, db)
 
 @app.put("/api/expenses/{expense_id}")
@@ -283,11 +283,11 @@ def update_expense(
     db: Session = Depends(get_db), current: User = Depends(get_current_user)
 ):
     e = db.query(Expense).filter(Expense.id == expense_id).first()
-    if not e: raise HTTPException(404, "経費が見つかりません")
+    if not e: raise HTTPException(404, "çµè²»ãè¦ã¤ããã¾ãã")
     if e.user_id != current.id and current.role != "admin":
-        raise HTTPException(403, "アクセス権限がありません")
+        raise HTTPException(403, "ã¢ã¯ã»ã¹æ¨©éãããã¾ãã")
     if e.status == "approved":
-        raise HTTPException(400, "承認済みの経費は変更できません")
+        raise HTTPException(400, "æ¿èªæ¸ã¿ã®çµè²»ã¯å¤æ´ã§ãã¾ãã")
     if req.amount       is not None: e.amount       = req.amount
     if req.category_id  is not None: e.category_id  = req.category_id
     if req.location     is not None: e.location     = req.location
@@ -300,18 +300,18 @@ def update_expense(
 @app.delete("/api/expenses/{expense_id}")
 def delete_expense(expense_id: int, db: Session = Depends(get_db), current: User = Depends(get_current_user)):
     e = db.query(Expense).filter(Expense.id == expense_id).first()
-    if not e: raise HTTPException(404, "経費が見つかりません")
+    if not e: raise HTTPException(404, "çµè²»ãè¦ã¤ããã¾ãã")
     if e.user_id != current.id and current.role != "admin":
-        raise HTTPException(403, "アクセス権限がありません")
+        raise HTTPException(403, "ã¢ã¯ã»ã¹æ¨©éãããã¾ãã")
     if e.status == "approved":
-        raise HTTPException(400, "承認済みの経費は削除できません")
+        raise HTTPException(400, "æ¿èªæ¸ã¿ã®çµè²»ã¯åé¤ã§ãã¾ãã")
     db.delete(e); db.commit()
-    return {"message": "削除しました"}
+    return {"message": "åé¤ãã¾ãã"}
 
 @app.post("/api/expenses/{expense_id}/approve")
 def approve_expense(expense_id: int, db: Session = Depends(get_db), current: User = Depends(require_admin)):
     e = db.query(Expense).filter(Expense.id == expense_id).first()
-    if not e: raise HTTPException(404, "経費が見つかりません")
+    if not e: raise HTTPException(404, "çµè²»ãè¦ã¤ããã¾ãã")
     e.status = "approved"; e.approved_by = current.id; e.approved_at = datetime.utcnow()
     db.commit(); db.refresh(e)
     return expense_to_dict(e, db)
@@ -319,20 +319,20 @@ def approve_expense(expense_id: int, db: Session = Depends(get_db), current: Use
 @app.post("/api/expenses/{expense_id}/reject")
 def reject_expense(expense_id: int, db: Session = Depends(get_db), current: User = Depends(require_admin)):
     e = db.query(Expense).filter(Expense.id == expense_id).first()
-    if not e: raise HTTPException(404, "経費が見つかりません")
+    if not e: raise HTTPException(404, "çµè²»ãè¦ã¤ããã¾ãã")
     e.status = "rejected"; e.approved_by = current.id; e.approved_at = datetime.utcnow()
     db.commit(); db.refresh(e)
     return expense_to_dict(e, db)
 
-# ────────────────────────────────────────
-# 分析・集計
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# åæã»éè¨
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.get("/api/analytics/summary")
 def analytics_summary(
     year: int = 2026, month: int = 2,
     db: Session = Depends(get_db), current: User = Depends(get_current_user)
 ):
-    """ダッシュボード用サマリー"""
+    """ããã·ã¥ãã¼ãç¨ãµããªã¼"""
     q = db.query(Expense)
     if current.role != "admin":
         q = q.filter(Expense.user_id == current.id)
@@ -356,7 +356,7 @@ def analytics_monthly(
     year: int = 2026,
     db: Session = Depends(get_db), current: User = Depends(get_current_user)
 ):
-    """月別推移データ"""
+    """æå¥æ¨ç§»ãã¼ã¿"""
     q = db.query(Expense)
     if current.role != "admin":
         q = q.filter(Expense.user_id == current.id)
@@ -364,7 +364,7 @@ def analytics_monthly(
 
     return [
         {
-            "month": m, "label": f"{m}月",
+            "month": m, "label": f"{m}æ",
             "total": sum(e.amount for e in all_exp if e.expense_date.month == m),
             "count": len([e for e in all_exp if e.expense_date.month == m])
         }
@@ -376,7 +376,7 @@ def analytics_daily(
     year: int = 2026, month: int = 2,
     db: Session = Depends(get_db), current: User = Depends(get_current_user)
 ):
-    """日別推移データ"""
+    """æ¥å¥æ¨ç§»ãã¼ã¿"""
     import calendar
     q = db.query(Expense)
     if current.role != "admin":
@@ -387,7 +387,7 @@ def analytics_daily(
 
     return [
         {
-            "day": d, "label": f"{d}日",
+            "day": d, "label": f"{d}æ¥",
             "total": sum(e.amount for e in all_exp if e.expense_date.day == d),
             "count": len([e for e in all_exp if e.expense_date.day == d])
         }
@@ -400,7 +400,7 @@ def analytics_category(
     month: Optional[int] = None,
     db: Session = Depends(get_db), current: User = Depends(get_current_user)
 ):
-    """科目別集計"""
+    """ç§ç®å¥éè¨"""
     q = db.query(Expense)
     if current.role != "admin":
         q = q.filter(Expense.user_id == current.id)
@@ -427,9 +427,9 @@ def analytics_category(
         })
     return sorted(result, key=lambda x: x["total"], reverse=True)
 
-# ────────────────────────────────────────
-# CSV エクスポート
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
+# CSV ã¨ã¯ã¹ãã¼ã
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.get("/api/export/csv")
 def export_csv(
     date_from:   Optional[str] = None,
@@ -447,11 +447,11 @@ def export_csv(
     if category_id: q = q.filter(Expense.category_id == category_id)
 
     items       = q.order_by(Expense.expense_date.desc()).all()
-    status_map  = {"approved": "承認済み", "pending": "承認待ち", "rejected": "否認"}
+    status_map  = {"approved": "æ¿èªæ¸ã¿", "pending": "æ¿èªå¾ã¡", "rejected": "å¦èª"}
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["経費ID","申請者","部署","発生日","科目","科目コード","使用場所","金額（円）","ステータス","備考","登録日"])
+    writer.writerow(["çµè²»ID","ç³è«è","é¨ç½²","çºçæ¥","ç§ç®","ç§ç®ã³ã¼ã","ä½¿ç¨å ´æ","éé¡ï¼åï¼","ã¹ãã¼ã¿ã¹","åè","ç»é²æ¥"])
     for e in items:
         u = db.query(User).filter(User.id == e.user_id).first()
         c = db.query(Category).filter(Category.id == e.category_id).first()
@@ -466,7 +466,7 @@ def export_csv(
             e.created_at.isoformat() if e.created_at else ""
         ])
 
-    content = "\ufeff" + output.getvalue()   # BOM付きUTF-8（Excel対応）
+    content = "\ufeff" + output.getvalue()   # BOMä»ãUTF-8ï¼Excelå¯¾å¿ï¼
     filename = f"expenses_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
     return StreamingResponse(
         io.BytesIO(content.encode("utf-8")),
@@ -474,15 +474,15 @@ def export_csv(
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
 # LINE Webhook
-# ────────────────────────────────────────
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.post("/api/line/webhook")
 async def line_webhook(request: Request, db: Session = Depends(get_db)):
-    """LINE公式アカウントからのWebhookを受信"""
+    """LINEå¬å¼ã¢ã«ã¦ã³ãããã®Webhookãåä¿¡"""
     body = await request.body()
 
-    # 署名検証（LINE_CHANNEL_SECRETが設定されている場合）
+    # ç½²åæ¤è¨¼ï¼LINE_CHANNEL_SECRETãè¨­å®ããã¦ããå ´åï¼
     if LINE_CHANNEL_SECRET:
         sig      = request.headers.get("X-Line-Signature", "")
         h        = hmac.new(LINE_CHANNEL_SECRET.encode(), body, hashlib.sha256).digest()
@@ -496,25 +496,25 @@ async def line_webhook(request: Request, db: Session = Depends(get_db)):
         msg      = event.get("message", {})
         line_uid = event.get("source", {}).get("userId", "")
 
-        # 画像・動画メッセージを受信
+        # ç»åã»åç»ã¡ãã»ã¼ã¸ãåä¿¡
         if msg.get("type") in ("image", "video"):
             user = db.query(User).filter(User.line_user_id == line_uid).first()
             if user:
-                # TODO: LINE Content APIからメディアを取得 → S3保存 → Google Cloud Vision OCR
-                # 現状は確認待ちのプレースホルダーとして登録
+                # TODO: LINE Content APIããã¡ãã£ã¢ãåå¾ â S3ä¿å­ â Google Cloud Vision OCR
+                # ç¾ç¶ã¯ç¢ºèªå¾ã¡ã®ãã¬ã¼ã¹ãã«ãã¼ã¨ãã¦ç»é²
                 e = Expense(
                     user_id=user.id, amount=0, category_id=1,
                     expense_date=date.today(), status="pending",
-                    note="⚠ LINE送信レシート（金額・科目を確認・修正してください）",
+                    note="â  LINEéä¿¡ã¬ã·ã¼ãï¼éé¡ã»ç§ç®ãç¢ºèªã»ä¿®æ­£ãã¦ãã ããï¼",
                     receipt_url=f"line-media://{msg.get('id')}"
                 )
                 db.add(e); db.commit()
 
     return {"status": "ok"}
 
-# ════════════════════════════════════════
-# 起動時の処理（DB初期化 + シードデータ投入）
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# èµ·åæã®å¦çï¼DBåæå + ã·ã¼ããã¼ã¿æå¥ï¼
+# ââââââââââââââââââââââââââââââââââââââââ
 @app.on_event("startup")
 def startup_event():
     Base.metadata.create_all(bind=engine)
@@ -522,33 +522,36 @@ def startup_event():
     try:
         if db.query(User).count() == 0:
             _seed(db)
-            print("✅ 初期データを投入しました")
+            print("â åæãã¼ã¿ãæå¥ãã¾ãã")
     finally:
         db.close()
 
 def _seed(db: Session):
-    # ── 経費科目 ──
+    # すでにデータがある場合はスキップ
+    if db.query(Category).first():
+        return
+    # ââ çµè²»ç§ç® ââ
     cats = [
-        Category(code="EXP-001", name="交通費",      sort_order=1),
-        Category(code="EXP-002", name="宿泊費",      sort_order=2),
-        Category(code="EXP-003", name="会議費",      sort_order=3),
-        Category(code="EXP-004", name="接待交際費",  sort_order=4),
-        Category(code="EXP-005", name="消耗品費",    sort_order=5),
-        Category(code="EXP-006", name="通信費",      sort_order=6),
-        Category(code="EXP-007", name="書籍・資料費",sort_order=7),
-        Category(code="EXP-008", name="研修費",      sort_order=8),
-        Category(code="EXP-009", name="慶弔費",      sort_order=9),
-        Category(code="EXP-010", name="その他",      sort_order=10),
+        Category(code="EXP-001", name="äº¤éè²»",      sort_order=1),
+        Category(code="EXP-002", name="å®¿æ³è²»",      sort_order=2),
+        Category(code="EXP-003", name="ä¼è­°è²»",      sort_order=3),
+        Category(code="EXP-004", name="æ¥å¾äº¤éè²»",  sort_order=4),
+        Category(code="EXP-005", name="æ¶èåè²»",    sort_order=5),
+        Category(code="EXP-006", name="éä¿¡è²»",      sort_order=6),
+        Category(code="EXP-007", name="æ¸ç±ã»è³æè²»",sort_order=7),
+        Category(code="EXP-008", name="ç ä¿®è²»",      sort_order=8),
+        Category(code="EXP-009", name="æ¶å¼è²»",      sort_order=9),
+        Category(code="EXP-010", name="ãã®ä»",      sort_order=10),
     ]
     for c in cats: db.add(c)
     db.commit()
 
-    # ── ユーザー ──
+    # ââ ã¦ã¼ã¶ã¼ ââ
     users_data = [
-        ("田中 花子", "tanaka@example.com",  "password123", "営業部", "employee"),
-        ("鈴木 一郎", "suzuki@example.com",  "password123", "総務部", "employee"),
-        ("佐藤 次郎", "sato@example.com",    "password123", "技術部", "employee"),
-        ("山田 社長", "yamada@example.com",  "admin1234",   "経営",   "admin"),
+        ("ç°ä¸­ è±å­", "tanaka@example.com",  "password123", "å¶æ¥­é¨", "employee"),
+        ("é´æ¨ ä¸é", "suzuki@example.com",  "password123", "ç·åé¨", "employee"),
+        ("ä½è¤ æ¬¡é", "sato@example.com",    "password123", "æè¡é¨", "employee"),
+        ("å±±ç° ç¤¾é·", "yamada@example.com",  "admin1234",   "çµå¶",   "admin"),
     ]
     for name, email, pw, dept, role in users_data:
         db.add(User(name=name, email=email, password_hash=hash_password(pw),
@@ -558,29 +561,29 @@ def _seed(db: Session):
     uid  = {u.email: u.id for u in db.query(User).all()}
     cid  = {c.code:  c.id for c in db.query(Category).all()}
 
-    # ── サンプル経費データ ──
+    # ââ ãµã³ãã«çµè²»ãã¼ã¿ ââ
     samples = [
-        # 2026/01 – 承認済み
-        (uid["tanaka@example.com"],  1840, cid["EXP-001"], "東京メトロ",            date(2026,1,6),  "approved", "新宿→渋谷 客先訪問",      uid["yamada@example.com"], datetime(2026,1,7,9,0)),
-        (uid["tanaka@example.com"],  5400, cid["EXP-003"], "スターバックス 新宿",    date(2026,1,8),  "approved", "チーム会議費",             uid["yamada@example.com"], datetime(2026,1,9,9,0)),
-        (uid["tanaka@example.com"], 15000, cid["EXP-004"], "銀座 鉄板焼き 光",       date(2026,1,10), "approved", "ABC商事との接待",          uid["yamada@example.com"], datetime(2026,1,12,14,0)),
-        (uid["suzuki@example.com"],  3500, cid["EXP-001"], "新幹線 東京→名古屋",     date(2026,1,14), "approved", "名古屋出張 往路",          uid["yamada@example.com"], datetime(2026,1,15,9,0)),
-        (uid["suzuki@example.com"], 12000, cid["EXP-002"], "名古屋 東横イン",        date(2026,1,14), "approved", "出張宿泊 1泊",             uid["yamada@example.com"], datetime(2026,1,15,9,0)),
-        (uid["tanaka@example.com"],  2800, cid["EXP-005"], "ヤマダ電機 LABI",        date(2026,1,16), "approved", "USBハブ・ケーブル類",      uid["yamada@example.com"], datetime(2026,1,17,10,0)),
-        (uid["sato@example.com"],    8800, cid["EXP-008"], "Udemy",                  date(2026,1,20), "approved", "Pythonプログラミング講座", uid["yamada@example.com"], datetime(2026,1,21,9,0)),
-        (uid["tanaka@example.com"],   660, cid["EXP-006"], "NTTドコモ",              date(2026,1,25), "approved", "業務用スマホ通信費（1月）",uid["yamada@example.com"], datetime(2026,1,26,10,0)),
-        (uid["suzuki@example.com"],  3200, cid["EXP-007"], "紀伊國屋書店",            date(2026,1,28), "approved", "ビジネス書 3冊",           uid["yamada@example.com"], datetime(2026,1,29,9,0)),
-        # 2026/02 – 承認済み
-        (uid["tanaka@example.com"],  2100, cid["EXP-001"], "東京メトロ",              date(2026,2,3),  "approved", "客先訪問（池袋）",          uid["yamada@example.com"], datetime(2026,2,4,9,0)),
-        (uid["tanaka@example.com"],  7500, cid["EXP-003"], "WeWork 渋谷",             date(2026,2,5),  "approved", "外部MTG 会議室代",          uid["yamada@example.com"], datetime(2026,2,6,9,0)),
-        (uid["sato@example.com"],   22000, cid["EXP-004"], "六本木 Restaurant XYZ",   date(2026,2,7),  "approved", "DEF株式会社接待",          uid["yamada@example.com"], datetime(2026,2,8,10,0)),
-        (uid["suzuki@example.com"],  1650, cid["EXP-005"], "Amazon",                  date(2026,2,10), "approved", "コピー用紙（500枚×2）",    uid["yamada@example.com"], datetime(2026,2,11,9,0)),
-        # 2026/02 – 承認待ち
-        (uid["tanaka@example.com"],  5800, cid["EXP-003"], "ドトール 渋谷店",          date(2026,2,12), "pending",  "営業チームMTG",    None, None),
-        (uid["sato@example.com"],    1200, cid["EXP-006"], "SoftBank",                date(2026,2,13), "pending",  "業務用スマホ通信費（2月）",None, None),
-        (uid["tanaka@example.com"], 18000, cid["EXP-004"], "麻布十番 和食 さくら",     date(2026,2,15), "pending",  "GHI商事接待",     None, None),
-        (uid["suzuki@example.com"],  4200, cid["EXP-001"], "新幹線 東京→大阪",        date(2026,2,17), "pending",  "大阪出張 往路",    None, None),
-        (uid["tanaka@example.com"],   980, cid["EXP-007"], "Amazon",                  date(2026,2,18), "pending",  "技術書 1冊",        None, None),
+        # 2026/01 â æ¿èªæ¸ã¿
+        (uid["tanaka@example.com"],  1840, cid["EXP-001"], "æ±äº¬ã¡ãã­",            date(2026,1,6),  "approved", "æ°å®¿âæ¸è°· å®¢åè¨ªå",      uid["yamada@example.com"], datetime(2026,1,7,9,0)),
+        (uid["tanaka@example.com"],  5400, cid["EXP-003"], "ã¹ã¿ã¼ããã¯ã¹ æ°å®¿",    date(2026,1,8),  "approved", "ãã¼ã ä¼è­°è²»",             uid["yamada@example.com"], datetime(2026,1,9,9,0)),
+        (uid["tanaka@example.com"], 15000, cid["EXP-004"], "éåº§ éæ¿ç¼ã å",       date(2026,1,10), "approved", "ABCåäºã¨ã®æ¥å¾",          uid["yamada@example.com"], datetime(2026,1,12,14,0)),
+        (uid["suzuki@example.com"],  3500, cid["EXP-001"], "æ°å¹¹ç· æ±äº¬âåå¤å±",     date(2026,1,14), "approved", "åå¤å±åºå¼µ å¾è·¯",          uid["yamada@example.com"], datetime(2026,1,15,9,0)),
+        (uid["suzuki@example.com"], 12000, cid["EXP-002"], "åå¤å± æ±æ¨ªã¤ã³",        date(2026,1,14), "approved", "åºå¼µå®¿æ³ 1æ³",             uid["yamada@example.com"], datetime(2026,1,15,9,0)),
+        (uid["tanaka@example.com"],  2800, cid["EXP-005"], "ã¤ããé»æ© LABI",        date(2026,1,16), "approved", "USBããã»ã±ã¼ãã«é¡",      uid["yamada@example.com"], datetime(2026,1,17,10,0)),
+        (uid["sato@example.com"],    8800, cid["EXP-008"], "Udemy",                  date(2026,1,20), "approved", "Pythonãã­ã°ã©ãã³ã°è¬åº§", uid["yamada@example.com"], datetime(2026,1,21,9,0)),
+        (uid["tanaka@example.com"],   660, cid["EXP-006"], "NTTãã³ã¢",              date(2026,1,25), "approved", "æ¥­åç¨ã¹ããéä¿¡è²»ï¼1æï¼",uid["yamada@example.com"], datetime(2026,1,26,10,0)),
+        (uid["suzuki@example.com"],  3200, cid["EXP-007"], "ç´ä¼åå±æ¸åº",            date(2026,1,28), "approved", "ãã¸ãã¹æ¸ 3å",           uid["yamada@example.com"], datetime(2026,1,29,9,0)),
+        # 2026/02 â æ¿èªæ¸ã¿
+        (uid["tanaka@example.com"],  2100, cid["EXP-001"], "æ±äº¬ã¡ãã­",              date(2026,2,3),  "approved", "å®¢åè¨ªåï¼æ± è¢ï¼",          uid["yamada@example.com"], datetime(2026,2,4,9,0)),
+        (uid["tanaka@example.com"],  7500, cid["EXP-003"], "WeWork æ¸è°·",             date(2026,2,5),  "approved", "å¤é¨MTG ä¼è­°å®¤ä»£",          uid["yamada@example.com"], datetime(2026,2,6,9,0)),
+        (uid["sato@example.com"],   22000, cid["EXP-004"], "å­æ¬æ¨ Restaurant XYZ",   date(2026,2,7),  "approved", "DEFæ ªå¼ä¼ç¤¾æ¥å¾",          uid["yamada@example.com"], datetime(2026,2,8,10,0)),
+        (uid["suzuki@example.com"],  1650, cid["EXP-005"], "Amazon",                  date(2026,2,10), "approved", "ã³ãã¼ç¨ç´ï¼500æÃ2ï¼",    uid["yamada@example.com"], datetime(2026,2,11,9,0)),
+        # 2026/02 â æ¿èªå¾ã¡
+        (uid["tanaka@example.com"],  5800, cid["EXP-003"], "ããã¼ã« æ¸è°·åº",          date(2026,2,12), "pending",  "å¶æ¥­ãã¼ã MTG",    None, None),
+        (uid["sato@example.com"],    1200, cid["EXP-006"], "SoftBank",                date(2026,2,13), "pending",  "æ¥­åç¨ã¹ããéä¿¡è²»ï¼2æï¼",None, None),
+        (uid["tanaka@example.com"], 18000, cid["EXP-004"], "éº»å¸åçª åé£ ããã",     date(2026,2,15), "pending",  "GHIåäºæ¥å¾",     None, None),
+        (uid["suzuki@example.com"],  4200, cid["EXP-001"], "æ°å¹¹ç· æ±äº¬âå¤§éª",        date(2026,2,17), "pending",  "å¤§éªåºå¼µ å¾è·¯",    None, None),
+        (uid["tanaka@example.com"],   980, cid["EXP-007"], "Amazon",                  date(2026,2,18), "pending",  "æè¡æ¸ 1å",        None, None),
     ]
     for uid_, amt, cid_, loc, dt_, st, note, apid, apat in samples:
         db.add(Expense(user_id=uid_, amount=amt, category_id=cid_, location=loc,
@@ -588,14 +591,14 @@ def _seed(db: Session):
                        approved_by=apid, approved_at=apat))
     db.commit()
 
-# ════════════════════════════════════════
-# 静的ファイル配信（フロントエンド）
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# éçãã¡ã¤ã«éä¿¡ï¼ãã­ã³ãã¨ã³ãï¼
+# ââââââââââââââââââââââââââââââââââââââââ
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
-# ════════════════════════════════════════
-# エントリーポイント
-# ════════════════════════════════════════
+# ââââââââââââââââââââââââââââââââââââââââ
+# ã¨ã³ããªã¼ãã¤ã³ã
+# ââââââââââââââââââââââââââââââââââââââââ
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
